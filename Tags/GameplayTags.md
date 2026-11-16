@@ -1,49 +1,54 @@
 # GAS_Tags.h / GAS_Tags.cpp
 
-这两个文件不定义 UObject 类。`GAS_Tags.h` 通过 `NativeGameplayTags.h` 声明原生标签变量，`GAS_Tags.cpp` 在相同命名空间内定义完整字符串。核对日期：2026-11-05。
+这两个文件不定义 UObject 类。`GAS_Tags.h` 通过 `NativeGameplayTags.h` 声明原生标签变量，`GAS_Tags.cpp` 在相同命名空间内定义完整字符串。核对日期：2026-11-16。
 
 源码目录：`Source/GAS_Learning/GameplayTags`。
 
-## GAS_Abilities：能力标识与自动激活约定
+## Abilities：能力标识与自动激活约定
 
 | C++ 变量（前缀 GAS_Tags::） | 完整注册字符串 | 当前 C++ 消费位置 |
 | --- | --- | --- |
-| `GAS_Abilities::ActivateOnGiven` | `GAS_Tags.GAS_Abilities.ActivateOnGiven` | ASC.HandleAutoActivateAbility 精确匹配 |
-| `GAS_Abilities::Primary` | `GAS_Tags.GAS_Abilities.Primary` | PlayerController.Primary |
-| `GAS_Abilities::Secondary` | `GAS_Tags.GAS_Abilities.Secondary` | PlayerController.Secondary |
-| `GAS_Abilities::Tertiary` | `GAS_Tags.GAS_Abilities.Tertiary` | PlayerController.Tertiary |
-| `GAS_Abilities::Enemy::HitReact` | `GAS_Tags.GAS_Abilities.Enemy.HitReact` | 已注册；自定义 C++ 没有直接引用该变量的调用 |
+| `Abilities::ActivateOnGiven` | `GAS_Tags.Abilities.ActivateOnGiven` | ASC.HandleAutoActivateAbility 精确匹配 |
+| `Abilities::Death` | `GAS_Tags.Abilities.Death` | 已注册，死亡能力配置待核验 |
+| `Abilities::Primary` | `GAS_Tags.Abilities.Primary` | PlayerController.Primary |
+| `Abilities::Secondary` | `GAS_Tags.Abilities.Secondary` | PlayerController.Secondary |
+| `Abilities::Tertiary` | `GAS_Tags.Abilities.Tertiary` | PlayerController.Tertiary |
+| `Abilities::Enemy::HitReact` | `GAS_Tags.Abilities.Enemy.HitReact` | 已注册；自定义 C++ 没有直接引用该变量的调用 |
 
 `ActivateOnGiven` 是 ASC 使用的约定，能力资产需在自身 AssetTags 中持有该标签才会匹配。其检查代码归入 [UGAS_AbilitySystemComponent](../AbilitySystem/AbilitySystemComponent.md)。
 
-## GAS_Events：事件标识
+## Events：事件标识
 
 | C++ 变量（前缀 GAS_Tags::） | 完整注册字符串 |
 | --- | --- |
-| `GAS_Events::Player::Primary` | `GAS_Tags.GAS_Events.Primary` |
-| `GAS_Events::Enemy::HitReact` | `GAS_Tags.GAS_Events.Enemy.HitReact` |
+| `Events::Player::Primary` | `GAS_Tags.Events.Primary` |
+| `Events::Enemy::HitReact` | `GAS_Tags.Events.Enemy.HitReact` |
 
-摘自 `GAS_Tags.cpp`，仅保留外层 `GAS_Tags` 内部 `GAS_Events::Player` 的完整命名空间定义：
+摘自 `GAS_Tags.cpp`，仅保留外层 `GAS_Tags` 内部 `Events::Player` 的完整命名空间定义：
 
 ```cpp
 namespace Player
 {
-    UE_DEFINE_GAMEPLAY_TAG_COMMENT(Primary, "GAS_Tags.GAS_Events.Primary", "Tag for the Player Primary Event");
+    UE_DEFINE_GAMEPLAY_TAG_COMMENT(Primary, "GAS_Tags.Events.Primary", "Tag for the Player Primary Event");
 }
 ```
 
 这里定义本身只有四行，不填充无关代码。C++ 命名空间含 `Player`，实际注册字符串不含 `.Player`。事件 Primary 与能力 Primary 是不同标签；Enemy.HitReact 的能力和事件字符串也不同。
 
-`UGAS_Primary::SendHitReactEventToActors()` 直接使用 `GAS_Events::Enemy::HitReact`，为目标数组逐项发送受击事件，Payload.Instigator 为当前 Avatar。`GAS_Events::Player::Primary` 当前只有注册，没有对应的自定义 C++ 发送调用。目标能力的监听与触发配置仍需核验，见 [事件关系索引](../AbilitySystem/GameplayEvents.md)。
+`UGAS_Primary::SendHitReactEventToActors()` 直接使用 `Events::Enemy::HitReact`，为目标数组逐项发送受击事件，Payload.Instigator 为当前 Avatar。`Events::Player::Primary` 当前只有注册，没有对应的自定义 C++ 发送调用。目标能力的监听与触发配置仍需核验，见 [事件关系索引](../AbilitySystem/GameplayEvents.md)。
+
+## Status 命名空间
+
+`GAS_Tags::Status::Dead` 注册为 `GAS_Tags.Status.Dead`，用于标识死亡状态。它与能力标识 `GAS_Tags.Abilities.Death` 属于不同分支。角色基类直接写入的是 `bAlive`，死亡能力如何使用标签及效果资产需在编辑器核验。
 
 ## 声明与定义的对应方式
 
-头文件使用 `UE_DECLARE_GAMEPLAY_TAG_EXTERN`，源文件使用 `UE_DEFINE_GAMEPLAY_TAG_COMMENT`，定义保持相同命名空间。以下摘自 `GAS_Tags.cpp` 的 `GAS_Abilities::Enemy` 命名空间，保留该命名空间定义：
+头文件使用 `UE_DECLARE_GAMEPLAY_TAG_EXTERN`，源文件使用 `UE_DEFINE_GAMEPLAY_TAG_COMMENT`，定义保持相同命名空间。以下摘自 `GAS_Tags.cpp` 的 `Abilities::Enemy` 命名空间，保留该命名空间定义：
 
 ```cpp
 namespace Enemy
 {
-    UE_DEFINE_GAMEPLAY_TAG_COMMENT(HitReact, "GAS_Tags.GAS_Abilities.Enemy.HitReact", "Tag for the Enemy HitReact Ability");
+    UE_DEFINE_GAMEPLAY_TAG_COMMENT(HitReact, "GAS_Tags.Abilities.Enemy.HitReact", "Tag for the Enemy HitReact Ability");
 }
 ```
 
@@ -59,6 +64,8 @@ flowchart TD
     definitions -->|"提供 ActivateOnGiven 变量"| handler["自定义 ASC.HandleAutoActivateAbility"]
     granted -->|"逐标签执行 MatchesTagExact"| handler
     handler -->|"命中约定标签时按 Spec.Handle"| activate["TryActivateAbility"]
+    definitions -->|"注册能力标识与状态标识"| death["Abilities.Death / Status.Dead"]
+    death -.->|"标签赋予、阻止规则与资产引用待核验"| deathAssets["死亡能力与 GE_Death"]
     definitions -->|"注册两个独立的事件标识"| events["Player.Primary / Enemy.HitReact"]
     events -->|"Enemy.HitReact 由该函数引用"| send["Primary.SendHitReactEventToActors"]
     send -->|"逐目标发送，Instigator 为发起 Avatar"| target["目标 ASC.HandleGameplayEvent"]

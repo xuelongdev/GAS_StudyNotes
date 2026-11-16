@@ -1,6 +1,6 @@
 # 跨文件关系索引：Gameplay Event 与受击方向
 
-本页串联所属类的事件与方向数据关系，成员和函数实现归入各类页面。核对日期：2026-11-05。
+本页串联所属类的事件与方向数据关系，成员和函数实现归入各类页面。核对日期：2026-11-16。
 
 ## 文件与类职责
 
@@ -13,7 +13,7 @@
 | UGAS_BlueprintLibrary | 按点积 / 叉积判定方向，将枚举映射为名称 | [方向工具](../Utils/BlueprintLibrary.md) |
 | UGAS_GameplayAbility | 转交激活参数，按开关显示能力名，不自行解析 Payload | [能力基类](GameplayAbility.md) |
 
-Primary 输入标签与事件标签不同。当前 C++ 发送的是 `GAS_Tags.GAS_Events.Enemy.HitReact`，通过独立 Tag 参数传递；Payload 显式填写 `Instigator` 为发起能力的 Avatar。Player.Primary 的事件字符串为 `GAS_Tags.GAS_Events.Primary`，不含 `.Player`，当前没有直接发送该标签的自定义 C++ 调用。
+Primary 输入标签与事件标签不同。当前 C++ 发送的是 `GAS_Tags.Events.Enemy.HitReact`，通过独立 Tag 参数传递；Payload 显式填写 `Instigator` 为发起能力的 Avatar。Player.Primary 的事件字符串为 `GAS_Tags.Events.Primary`，不含 `.Player`，当前没有直接发送该标签的自定义 C++ 调用。
 
 ## 已实现与待核验连接
 
@@ -43,8 +43,8 @@ flowchart TD
 | --- | --- | --- |
 | Notifies | AN_SendEventToActor.uasset | 父类、目标、Tag、Payload 与通知执行端 |
 | Characters/Player/Anim | AM_GAS_Primary_A / B、Primary_A / B | 动画引用、通知轨道和时机 |
-| AbilitySystem/PlayerAbilities | GA_GAS_Primary | 父类、检测调用、发送调用及结束逻辑 |
-| AbilitySystem/EnemyAbilities | GA_GAS_HitReact、GA_GAS_HitReact_Melee / Ranged | 继承关系、触发 Tag、Payload 读取、方向缓存与工具调用 |
+| AbilitySystem/Abilities/PlayerAbilities | GA_GAS_Primary | 父类、检测调用、发送调用及结束逻辑 |
+| AbilitySystem/Abilities/EnemyAbilities | GA_GAS_HitReact、GA_GAS_HitReact_Melee / Ranged | 继承关系、触发 Tag、Payload 读取、方向缓存与工具调用 |
 | Characters/Enemy/Anim | AM_HitReact_Melee / Ranged | 方向名称与动画片段对应、播放和结束行为 |
 
 这些文件已确认存在，内部蓝图和动画设置未在本次通过编辑器核验。

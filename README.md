@@ -1,6 +1,6 @@
 # GAS_StudyNotes
 
-按参考项目 `..\GAS_Learning` 当前类文件组织的 GAS 学习笔记。核对日期：2026-11-09；项目声明引擎版本：**Unreal Engine 5.6**。
+按参考项目 `..\GAS_Learning` 当前类文件组织的 GAS 学习笔记。核对日期：2026-11-16；项目声明引擎版本：**Unreal Engine 5.6**。
 
 ## 类文件索引
 
@@ -16,10 +16,11 @@
 | `AbilitySystem/GAS_AttributeSet` | `UGAS_AttributeSet` | [属性访问器、数值复制与初始化标记](AbilitySystem/AttributeSet.md) |
 | `UI/GAS_WidgetComponent` | `UGAS_WidgetComponent` | [引用缓存、属性监听与解绑](UI/WidgetComponent.md) |
 | `UI/GAS_AttributeWidget` | `UGAS_AttributeWidget` | [属性对匹配与蓝图刷新事件](UI/AttributeWidget.md) |
-| `AbilitySystem/GAS_AbilitySystemComponent` | `UGAS_AbilitySystemComponent` | [授予回调、复制回调与自动激活检查](AbilitySystem/AbilitySystemComponent.md) |
+| `AbilitySystem/GAS_AbilitySystemComponent` | `UGAS_AbilitySystemComponent` | [自动激活检查与能力等级更新](AbilitySystem/AbilitySystemComponent.md) |
 | `AbilitySystem/Abilities/GAS_GameplayAbility` | `UGAS_GameplayAbility` | [激活回调与公共调试属性](AbilitySystem/GameplayAbility.md) |
 | `AbilitySystem/Abilities/Player/GAS_Primary` | `UGAS_Primary` | [命中查询、事件发送与调试绘制](AbilitySystem/Primary.md) |
 | `AbilitySystem/Abilities/Enemy/GAS_HitReact` | `UGAS_HitReact` | [方向向量缓存与调用边界](AbilitySystem/HitReact.md) |
+| `Tasks/GAS_AttritubeChangeTask` | `UGAS_AttributeChangeTask` | [蓝图异步属性监听与结束清理](Tasks/AttributeChangeTask.md) |
 | `Utils/GAS_BlueprintLibrary` | `UGAS_BlueprintLibrary` | [方向枚举、判定与名称映射](Utils/BlueprintLibrary.md) |
 
 ## 非类文件与关系索引
@@ -66,6 +67,6 @@ flowchart TD
 
 资源路径已核对文件存在；本次没有通过 UE 编辑器核验蓝图父类、默认数组、事件图和动画通知。未核验的关系以虚线标注。当前业务能力资源包含 `GA_GAS_Primary`、`GA_Secondary`、`GA_Teriary`、`GA_GAS_HitReact` 及其 Melee / Ranged 资源，其中 `GA_Teriary` 是实际文件拼写。
 
-当前源码覆盖属性初始化、复制、控件刷新和生命值归零处理。初始效果资产、UI 资产和伤害相关资源已按磁盘文件核对。蓝图挂载、属性对、效果数值和伤害资产的调用关系需在编辑器核验。参见 [项目配置与资源索引](Game/ProjectSetup.md)。
+当前源码覆盖属性初始化、复制、控件刷新、蓝图异步属性监听、能力等级更新和生命值归零处理。初始效果资产、UI 资产和伤害相关资源已按磁盘文件核对。蓝图挂载、属性对、效果数值和伤害资产的调用关系需在编辑器核验。参见 [项目配置与资源索引](Game/ProjectSetup.md)。
 
 业务资源和地图路径均使用 `GAS_Learning`，旧脚本包名称保留在重定向配置中。

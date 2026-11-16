@@ -124,6 +124,8 @@ flowchart TD
 
 ## 生命值监听与存活状态
 
+玩家的服务端及客户端角色实例分别在各自回调中绑定 Health 委托。敌人的角色绑定位于 `BeginPlay()` 权威端分支。
+
 头文件将 `bAlive` 定义为默认 true 的私有布尔值。`IsAlive()` 与 `SetAlive(bool)` 是公开内联访问入口。受保护的 `OnHealthChanged()` 在新值小于或等于零时调用 `HandleDeath()`。后者将 `bAlive` 置为 false，并在 GEngine 有效时显示三秒的红色调试文字。公开的 BlueprintCallable `HandleRespawn()` 将 `bAlive` 恢复为 true。
 
 ```mermaid
@@ -137,3 +139,16 @@ flowchart TD
 `bAlive` 由本端代码写入。重复收到非正生命值回调会再次执行死亡处理。`HandleRespawn()` 的实现范围是存活标志，实际重生行为取决于调用者。
 
 参见：[属性集](../AbilitySystem/AttributeSet.md)、[Widget 组件](../UI/WidgetComponent.md)、[初始化关系索引](../AbilitySystem/StartupAbilities.md)。
+
+## 死亡资源与标签
+
+```mermaid
+flowchart TD
+    base["角色基类 HandleDeath"] -->|"写入本端存活标志"| alive["bAlive = false"]
+    asc["本端 ASC 的属性变化"] -->|"该代理已订阅时广播新旧值"| task["UGAS_AttributeChangeTask"]
+    task -.->|"异步节点与死亡判断连接待核验"| listen["GA_GAS_ListebForHealthChange"]
+    listen -.->|"死亡能力激活方式待核验"| abilities["GA_GAS_Death 与敌人死亡能力"]
+    abilities -.->|"效果、状态标签与动画配置待核验"| assets["GE_Death / Status.Dead / AM_Death_Melee 与 Ranged"]
+```
+
+C++ 角色回调与异步代理各自订阅 ASC。当前 `HandleDeath()` 实现写入 `bAlive` 并输出调试文字。死亡能力、效果和动画的蓝图连接仍待编辑器核验。参见 [属性监听代理](../Tasks/AttributeChangeTask.md) 与 [资源索引](../Game/ProjectSetup.md)。

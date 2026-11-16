@@ -113,7 +113,7 @@ flowchart TD
 
 ## Primary、Secondary、Tertiary 与 ActivateAbility
 
-三个能力回调仅选择标签，例如 `Primary()` 调用 `ActivateAbility(GAS_Tags::GAS_Abilities::Primary)`，之后复用同一个函数。
+三个能力回调仅选择标签，例如 `Primary()` 调用 `ActivateAbility(GAS_Tags::Abilities::Primary)`，之后复用同一个函数。
 
 摘自 `Source/GAS_Learning/Player/GAS_PlayerController.cpp` 的 `ActivateAbility()`，省略原注释，保留完整函数；仅调整空白排版：
 

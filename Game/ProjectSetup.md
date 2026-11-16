@@ -1,6 +1,6 @@
 # 配置文件、构建类与资源索引
 
-本页按实际文件归档非玩法类内容。参考项目为 `..\GAS_Learning`，核对日期：2026-11-09。
+本页按实际文件归档非玩法类内容。参考项目为 `..\GAS_Learning`，核对日期：2026-11-16。
 
 ## GAS_Learning.uproject
 
@@ -15,7 +15,7 @@
 | EnhancedInput | AGAS_PlayerController 的输入 Action、Mapping Context 和子系统 API |
 | GameplayAbilities | 自定义 ASC、能力类、GAS 接口和 Spec |
 | GameplayTags | GAS_Tags 命名空间及 Tag 查询 |
-| GameplayTasks | GAS 相关依赖；当前没有自定义 Task 类 |
+| GameplayTasks | GAS 相关依赖。属性监听代理继承 UBlueprintAsyncActionBase |
 | UMG | UGAS_WidgetComponent 继承的 UWidgetComponent 及 UI 类型依赖 |
 
 ## Target.cs：游戏与编辑器目标类
@@ -103,6 +103,8 @@ Blueprints/
       Anim/ABP_Enemy_Ranged.uasset
       Anim/AM_HitReact_Melee.uasset
       Anim/AM_HitReact_Ranged.uasset
+      Anim/AM_Death_Melee.uasset
+      Anim/AM_Death_Ranged.uasset
   Notifies/AN_SendEventToActor.uasset
   Input/
     IMC_Movement.uasset
@@ -116,14 +118,20 @@ Blueprints/
     AbilityActions/IA_LevelUpAbility.uasset
   AbilitySystem/
     GameplayEffects/GE_Initialize_Attributes.uasset
+    GameplayEffects/GE_Death.uasset
     GameplayEffects/Player/GE_PlayerDamage.uasset
     GameplayEffects/Player/CT_PlayerDamage.uasset
-    PlayerAbilities/GA_GAS_Primary.uasset
-    PlayerAbilities/GA_Secondary.uasset
-    PlayerAbilities/GA_Teriary.uasset
-    EnemyAbilities/GA_GAS_HitReact.uasset
-    EnemyAbilities/GA_GAS_HitReact_Melee.uasset
-    EnemyAbilities/GA_GAS_HitReact_Ranged.uasset
+    Abilities/
+      GA_GAS_ListebForHealthChange.uasset
+      GA_GAS_Death.uasset
+      PlayerAbilities/GA_GAS_Primary.uasset
+      PlayerAbilities/GA_Secondary.uasset
+      PlayerAbilities/GA_Teriary.uasset
+      EnemyAbilities/GA_GAS_HitReact.uasset
+      EnemyAbilities/GA_GAS_HitReact_Melee.uasset
+      EnemyAbilities/GA_GAS_HitReact_Ranged.uasset
+      EnemyAbilities/GA_GAS_Death_Melee.uasset
+      EnemyAbilities/GA_GAS_Death_Ranged.uasset
 ```
 
 `/Game/...` 对应磁盘 `Content/...`；GameMode 路径的 `_C` 指蓝图生成类。上述文件存在已核对，蓝图父类、默认引用、动画通知轨道和能力事件图没有经过本次编辑器核验。

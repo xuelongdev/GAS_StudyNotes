@@ -1,6 +1,6 @@
 # 跨类关系索引：授予与激活
 
-本页按所属类串联关系，成员和函数实现归入各类页面。核对日期：2026-11-09。
+本页按所属类串联关系，成员和函数实现归入各类页面。核对日期：2026-11-16。
 
 ## 组件与 ActorInfo 所属关系
 
@@ -79,6 +79,16 @@ flowchart TD
 ```
 
 属性集标记有独立的本端广播与复制通知。Widget 绑定依据是对象引用与控件实例，数值刷新来自快照和 ASC 委托。
+
+## 属性监听入口
+
+| 监听入口 | 订阅范围与接收方式 |
+| --- | --- |
+| [角色基类与派生角色](../Characters/CharacterBase.md) | Health 变化交给 OnHealthChanged |
+| [控件组件](../UI/WidgetComponent.md) | AttributeMap 匹配的当前值和上限触发控件刷新 |
+| [蓝图异步属性监听](../Tasks/AttributeChangeTask.md) | 蓝图选择一项属性，代理通过 OnAttributeChanged 转发新旧值 |
+
+已授予能力的等级修改见 [ASC 的等级接口](AbilitySystemComponent.md)。
 
 ## 能力类之间的关系
 

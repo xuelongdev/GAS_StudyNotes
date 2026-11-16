@@ -83,7 +83,7 @@ void UGAS_Primary::SendHitReactEventToActors(const TArray<AActor*>& ActorsHit)
     {
         FGameplayEventData Payload;
         Payload.Instigator = GetAvatarActorFromActorInfo();
-        UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Result, GAS_Tags::GAS_Events::Enemy::HitReact, Payload);
+        UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Result, GAS_Tags::Events::Enemy::HitReact, Payload);
     }
 }
 ```
