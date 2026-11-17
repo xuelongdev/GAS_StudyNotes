@@ -95,7 +95,7 @@ flowchart TD
 - `BP_GAS_EnemyBase.uasset`、`BP_Enemy_Melee.uasset`、`BP_Enemy_Ranged.uasset`。
 - `Anim/ABP_Enemy_Melee.uasset`、`Anim/ABP_Enemy_Ranged.uasset`。
 
-这些是资源入口。蓝图是否派生自该 C++ 类、填入哪些启动能力、是否设置 Actor 复制及动画类，需要在编辑器核验。组件的 `SetIsReplicated(true)` 不能单独作为整套联网行为已验证的依据。
+父类、启动能力和血条组件的保存值见下方蓝图设置。Actor 的实际复制表现与动画蓝图运行行为待编辑器验证。
 
 敌人的生命值回调复用基类存活状态处理。AI 行为与动画由对应资产配置，需在编辑器核验。
 
@@ -104,3 +104,27 @@ flowchart TD
 ## Health 委托的绑定位置
 
 `BeginPlay()` 在服务端初始属性应用之后绑定，客户端在权限分支处结束。 两条角色实现均要求属性集能转型为 `UGAS_AttributeSet`。成功后用 `AddUObject` 将 ASC 的 Health 变化委托交给基类 `OnHealthChanged()`。该绑定接收之后发生的变化，建立时没有主动读取当前 Health 执行死亡判断。参见 [角色基类](CharacterBase.md)。
+
+## 敌人蓝图的默认值与组件
+
+以下资产位于 `/Game/GAS_Learning/Blueprints/Characters/Enemy`。启动能力数组按保存顺序列出。
+
+| 蓝图 | 父类 | StartupAbilities |
+| --- | --- | --- |
+| BP_GAS_EnemyBase | AGAS_EnemyCharacter | GA_GAS_HitReact |
+| BP_Enemy_Melee | BP_GAS_EnemyBase | GA_GAS_HitReact_Melee、GA_GAS_ListebForHealthChange、GA_GAS_Death_Melee |
+| BP_Enemy_Ranged | BP_GAS_EnemyBase | GA_GAS_HitReact_Ranged、GA_GAS_ListebForHealthChange、GA_GAS_Death_Ranged |
+
+基蓝图的 `InitializeAttributesEffect` 为 `GE_Initialize_Attributes`。基蓝图组件将 `BP_HealthBar` 作为 Widget Class，Space 为 Screen，Draw Size 为 120 × 10，`AttributeMap` 保存 Health 对 MaxHealth。
+
+```mermaid
+flowchart TD
+    base["BP_GAS_EnemyBase"] -->|"继承并覆盖启动数组"| melee["BP_Enemy_Melee"]
+    base -->|"继承并覆盖启动数组"| ranged["BP_Enemy_Ranged"]
+    base -->|"InitializeAttributesEffect"| initial["GE_Initialize_Attributes"]
+    base -->|"组件显示 BP_HealthBar，绑定生命值与上限"| ui["Screen 血条"]
+    melee -->|"引用近战死亡能力"| meleeAbility["GA_GAS_Death_Melee"]
+    ranged -->|"引用远程死亡能力"| rangedAbility["GA_GAS_Death_Ranged"]
+```
+
+死亡与受击动画资产的赋值见 [死亡与监听设置](../AbilitySystem/DeathBlueprints.md) 和 [受击能力](../AbilitySystem/HitReact.md)。

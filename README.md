@@ -1,6 +1,6 @@
 # GAS_StudyNotes
 
-按参考项目 `..\GAS_Learning` 当前类文件组织的 GAS 学习笔记。核对日期：2026-11-16；项目声明引擎版本：**Unreal Engine 5.6**。
+按参考项目 `..\GAS_Learning` 当前类文件组织的 GAS 学习笔记。核对日期：2026-11-17；项目声明引擎版本：**Unreal Engine 5.6**。
 
 ## 类文件索引
 
@@ -32,6 +32,7 @@
 | `BP_GAS_Gamemode` 蓝图及默认配置 | [GameMode 配置关系](Game/GameMode.md) |
 | 角色、PlayerState、ASC 与 Controller | [跨类授予及激活关系](AbilitySystem/StartupAbilities.md) |
 | 标签、能力类、动画与通知资产 | [事件关系索引](AbilitySystem/GameplayEvents.md) |
+| 生命值监听、死亡能力、效果和动画 | [死亡蓝图设置](AbilitySystem/DeathBlueprints.md) |
 
 ## 类间职责关系
 
@@ -65,7 +66,7 @@ flowchart TD
 
 代码以参考项目的 `.h` / `.cpp` 为准，配置以 `.uproject` / `.ini` 为准。短代码注明源文件、函数与节选范围；跨类页面只索引关系，具体函数归入所属类说明。
 
-资源路径已核对文件存在；本次没有通过 UE 编辑器核验蓝图父类、默认数组、事件图和动画通知。未核验的关系以虚线标注。当前业务能力资源包含 `GA_GAS_Primary`、`GA_Secondary`、`GA_Teriary`、`GA_GAS_HitReact` 及其 Melee / Ranged 资源，其中 `GA_Teriary` 是实际文件拼写。
+蓝图设置以资产注册信息、类默认对象、组件模板、输入映射与事件图节点数据为依据。虚线表示尚待核验的执行或数据连接。
 
 当前源码覆盖属性初始化、复制、控件刷新、蓝图异步属性监听、能力等级更新和生命值归零处理。初始效果资产、UI 资产和伤害相关资源已按磁盘文件核对。蓝图挂载、属性对、效果数值和伤害资产的调用关系需在编辑器核验。参见 [项目配置与资源索引](Game/ProjectSetup.md)。
 

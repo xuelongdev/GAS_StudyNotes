@@ -2,7 +2,7 @@
 
 GameMode 负责游戏规则和玩家对象的创建配置；联网游戏中的 GameMode 位于服务端。客户端需要使用的玩家状态，应通过 PlayerState 等可复制对象提供。
 
-本项目的 GameMode 入口为蓝图资产，没有对应的自定义 GameMode `.h` / `.cpp`。本页只说明已读取的配置和外部类依赖，不推断蓝图内部成员及函数。
+本项目的 GameMode 入口为蓝图资产，没有对应的自定义 GameMode `.h` / `.cpp`。资产注册信息中的父类为 `AGameModeBase`。
 
 资产路径：
 
@@ -22,24 +22,24 @@ GlobalDefaultGameMode=/Game/GAS_Learning/Blueprints/Game/BP_GAS_Gamemode.BP_GAS_
 
 即项目默认运行地图和编辑器启动地图都是 `Map_Main`，项目默认 GameMode 为 `BP_GAS_Gamemode`。具体地图的 World Settings 还可能覆盖 GameMode，运行时应检查该项；本次未核验地图内部设置。
 
-## 蓝图类属性：外部依赖（待核验）
+## 蓝图类默认值
 
-| GameMode 属性 | 对应资源 | 核对原因 |
+| GameMode 属性 | 已保存的类 | 职责 |
 | --- | --- | --- |
 | Default Pawn Class | `BP_GAS_PlayerCharacter` | 让实际生成的角色具有 ASC 访问与初始化逻辑 |
 | Player Controller Class | `BP_GAS_PlayerController` | 使用项目的 Enhanced Input 和能力激活入口 |
 | Player State Class | `BP_GAS_PlayerState` | 提供角色所需的 ASC 与属性集 |
 
-以上蓝图文件均已确认存在，但表格是**编辑器核对清单**，不是已读取到的蓝图属性值。仅有 `.ini` 中的 GameMode 路径，无法证明这三个类已正确赋值。
+三个字段均取自 `Default__BP_GAS_Gamemode_C` 的序列化属性。
 
 ```mermaid
 flowchart TD
     settings["DefaultEngine.ini"] -->|"GlobalDefaultGameMode 指定"| mode["BP_GAS_Gamemode"]
     settings -->|"默认游戏地图和编辑器启动地图指定"| map["Map_Main"]
     map -.->|"World Settings 可能覆盖，待核验"| mode
-    mode -.->|"Default Pawn Class 预期配置，待核验"| pawn["BP_GAS_PlayerCharacter"]
-    mode -.->|"Player Controller Class 预期配置，待核验"| controller["BP_GAS_PlayerController"]
-    mode -.->|"Player State Class 预期配置，待核验"| state["BP_GAS_PlayerState"]
+    mode -->|"DefaultPawnClass"| pawn["BP_GAS_PlayerCharacter"]
+    mode -->|"PlayerControllerClass"| controller["BP_GAS_PlayerController"]
+    mode -->|"PlayerStateClass"| state["BP_GAS_PlayerState"]
     pawn -->|"运行时 getter 需要兼容的 PlayerState 类型"| state
     state -->|"其 C++ 实现创建并提供"| asc["ASC"]
 ```
@@ -54,7 +54,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    config["GameMode 玩家类配置正确"] -.->|"运行前提，蓝图配置待核验"| possessed["角色被占有：PossessedBy"]
+    config["服务端采用该 GameMode"] -->|"按默认类创建并占有 Pawn 时"| possessed["角色被占有：PossessedBy"]
     possessed -->|"调用角色 getter"| getter["取得 PlayerState.ASC"]
     getter -->|"ASC 有效且服务端拥有权限"| info["InitAbilityActorInfo"]
     info -->|"先广播本端 ASC / AS"| signal["OnASCInitialized.Broadcast"]

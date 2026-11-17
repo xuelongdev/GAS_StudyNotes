@@ -153,3 +153,22 @@ flowchart TD
 ## Health 委托的绑定位置
 
 服务端在初始属性应用之后绑定，客户端在 `OnRep_PlayerState()` 广播之后绑定。 两条角色实现均要求属性集能转型为 `UGAS_AttributeSet`。成功后用 `AddUObject` 将 ASC 的 Health 变化委托交给基类 `OnHealthChanged()`。该绑定接收之后发生的变化，建立时没有主动读取当前 Health 执行死亡判断。参见 [角色基类](CharacterBase.md)。
+
+## BP_GAS_PlayerCharacter 的蓝图设置
+
+资产路径为 `/Game/GAS_Learning/Blueprints/Characters/Player/BP_GAS_PlayerCharacter`，父类为 `AGAS_PlayerCharacter`。类默认值的 `InitializeAttributesEffect` 指向 `GE_Initialize_Attributes`，`StartupAbilities` 依次为 `GA_GAS_Primary`、`GA_Secondary`、`GA_Teriary`、`GA_GAS_ListebForHealthChange`。
+
+蓝图的 `BP_GAS_WidgetComponent` 组件设为 Screen，Widget Class 为 `BP_PlayerStatsWidget`，开启 Draw at Desired Size。组件的 `AttributeMap` 保存 Health 对 MaxHealth、Mana 对 MaxMana 两组映射。
+
+事件图记录了 `IA_LevelUpAbility`、`LevelUpAbility`、`GetAbilitySystemComponent` 和 `AddAbilityLevel` 相关节点。升级目标类、增量、执行引脚和网络转发待编辑器核验。
+
+```mermaid
+flowchart TD
+    player["BP_GAS_PlayerCharacter 默认值"] -->|"InitializeAttributesEffect"| ge["GE_Initialize_Attributes"]
+    player -->|"StartupAbilities 数组，服务端授予时读取"| spec["Primary / Secondary / Teriary / 生命值监听"]
+    player -->|"Screen 组件的 Widget Class"| ui["BP_PlayerStatsWidget"]
+    imc["IMC_Abilities"] -->|"L 映射"| action["IA_LevelUpAbility"]
+    action -.->|"事件节点至升级函数的执行连线待核验"| level["AddAbilityLevel"]
+```
+
+参见 [ASC 等级接口](../AbilitySystem/AbilitySystemComponent.md) 和 [属性控件](../UI/AttributeWidget.md)。

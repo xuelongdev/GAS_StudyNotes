@@ -67,7 +67,11 @@ flowchart TD
     first -->|"首次刷新后，为当前值与上限记录句柄"| listeners["ASC 属性变化委托"]
     listeners -->|"任一属性变化且弱引用有效"| refresh["AttributeWidget.OnAttributeChange"]
     refresh -->|"从同一属性集读取当前值与上限"| event["BP_OnAttributeChange"]
-    assets["UI 蓝图资产"] -.->|"组件挂载、父类与属性对设置待核验"| match
+    assets["角色蓝图的组件模板"] -->|"已保存属性对，运行时用于匹配"| match
 ```
 
 组件按本端可用的角色与控件实例建立监听。客户端属性更新可经属性集的数值复制通知进入本端 ASC，具体蓝图显示由属性控件的事件实现决定。参见 [属性集](../AbilitySystem/AttributeSet.md) 与 [属性控件](AttributeWidget.md)。
+
+## 蓝图组件实例
+
+`/Game/GAS_Learning/UI/BP_GAS_WidgetComponent` 继承 `UGAS_WidgetComponent`。玩家与敌人基蓝图的组件模板分别配置整组玩家状态控件和单项生命条。参见 [玩家组件设置](../Characters/PlayerCharacter.md) 和 [敌人组件设置](../Characters/EnemyCharacter.md)。

@@ -41,10 +41,23 @@ flowchart TD
 
 | 目录 | 文件 | 待编辑器核验内容 |
 | --- | --- | --- |
-| Notifies | AN_SendEventToActor.uasset | 父类、目标、Tag、Payload 与通知执行端 |
-| Characters/Player/Anim | AM_GAS_Primary_A / B、Primary_A / B | 动画引用、通知轨道和时机 |
-| AbilitySystem/Abilities/PlayerAbilities | GA_GAS_Primary | 父类、检测调用、发送调用及结束逻辑 |
-| AbilitySystem/Abilities/EnemyAbilities | GA_GAS_HitReact、GA_GAS_HitReact_Melee / Ranged | 继承关系、触发 Tag、Payload 读取、方向缓存与工具调用 |
+| Notifies | AN_SendEventToActor.uasset | 目标与 Payload 引脚，通知执行端 |
+| Characters/Player/Anim | AM_GAS_Primary_A / B、Primary_A / B | 通知的具体触发时间 |
+| AbilitySystem/Abilities/PlayerAbilities | GA_GAS_Primary | 检测、发送、伤害与结束的执行连线 |
+| AbilitySystem/Abilities/EnemyAbilities | GA_GAS_HitReact、GA_GAS_HitReact_Melee / Ranged | 等待节点的 Tag 与 Payload 引脚，方向缓存及工具调用的连线 |
 | Characters/Enemy/Anim | AM_HitReact_Melee / Ranged | 方向名称与动画片段对应、播放和结束行为 |
 
-这些文件已确认存在，内部蓝图和动画设置未在本次通过编辑器核验。
+能力的类默认值见 [主攻击](Primary.md) 和 [受击能力](HitReact.md)。
+
+## 主攻击蒙太奇的通知设置
+
+`/Game/GAS_Learning/Blueprints/Characters/Player/Anim` 下的 `AM_GAS_Primary_A` 与 `AM_GAS_Primary_B` 均保存 `AN_SendEventToActor` 通知实例，其 `EventTag` 为 `GAS_Tags.Events.Primary`。
+
+`/Game/GAS_Learning/Blueprints/Notifies/AN_SendEventToActor` 的父类为 `UAnimNotify`。`Received_Notify` 图保存了 `GetOwner`、`GetAbilitySystemComponent` 和 `SendGameplayEventToActor` 节点。通知执行端、发送目标与能力等待节点的引脚连线待核验。
+
+```mermaid
+flowchart TD
+    montages["AM_GAS_Primary_A / B"] -->|"保存 AN_SendEventToActor 实例及 EventTag"| notify["GAS_Tags.Events.Primary"]
+    notify -.->|"Received_Notify 的执行与目标引脚待核验"| send["SendGameplayEventToActor 节点"]
+    send -.->|"等待事件的执行端与连接待核验"| wait["GA_GAS_Primary.WaitGameplayEvent"]
+```

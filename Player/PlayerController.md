@@ -32,7 +32,22 @@
 | `SecondaryAction` | `IA_Secondary` | 次能力入口 |
 | `TertiaryAction` | `IA_Tertiary` | 第三能力入口 |
 
-上述资源已确认存在于 `Content/GAS_Learning/Blueprints/Input`，属性的实际引用、Action 值类型、具体键位和 Modifier 需在编辑器核验。
+蓝图 `/Game/GAS_Learning/Blueprints/Player/BP_GAS_PlayerController` 的父类为 `AGAS_PlayerController`。类默认值中，`InputMappingContexts` 按 `IMC_Movement`、`IMC_Abilities` 排列，六个 Action 成员均引用上表对应资产。映射数据保存在 `/Game/GAS_Learning/Blueprints/Input`。
+
+| IMC | 键 | Action | 映射中的 Modifier |
+| --- | --- | --- | --- |
+| IMC_Movement | SpaceBar | IA_Jump | 空 |
+| IMC_Movement | Mouse2D | IA_Look | Negate，仅 Y 开启 |
+| IMC_Movement | W | IA_Move | Swizzle Axis，YXZ |
+| IMC_Movement | S | IA_Move | Swizzle Axis，YXZ，再 Negate |
+| IMC_Movement | A | IA_Move | Negate |
+| IMC_Movement | D | IA_Move | 空 |
+| IMC_Abilities | LeftMouseButton | IA_Primary | 空 |
+| IMC_Abilities | One | IA_Secondary | 空 |
+| IMC_Abilities | Two | IA_Tertiary | 空 |
+| IMC_Abilities | L | IA_LevelUpAbility | 空 |
+
+`IA_Move` 与 `IA_Look` 的资产值类型为 Axis2D。W 与 S 的 Swizzle 对象沿用 UE 5.6 的默认顺序 YXZ，两个键因此将一维键值写入移动输入的 Y 轴。升级 Action 的图节点归入玩家角色蓝图笔记。参见 [玩家角色](../Characters/PlayerCharacter.md)。
 
 `SetupInputComponent()` 先调用父类，然后取得 `UEnhancedInputLocalPlayerSubsystem`，将数组中的每个 Context 以优先级 `0` 加入，再把 `InputComponent` 转型为 `UEnhancedInputComponent` 并绑定输入。取得子系统或转型失败都会提前返回。
 

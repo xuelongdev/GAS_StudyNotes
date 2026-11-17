@@ -104,7 +104,7 @@ if (UGAS_AttributeSet* Attributes = Cast<UGAS_AttributeSet>(GetAttributeSet()))
 
 函数要求 `InitializeAttributesEffect` 是有效效果类，构造等级 1 的 Spec，再应用到当前 ASC。检查 ASC 之前先执行 `checkf`；函数检查 `SpecHandle.IsValid()` 后才解引用 Data。应用调用返回后，若属性集可转型为 `UGAS_AttributeSet`，则调用 `MarkAttributesInitialized()`。
 
-函数自身没有权限分支；当前玩家和敌人的调用点均在服务端，并在 `GiveStartupAbilities()` 之后调用。由于授予回调可尝试自动激活能力，当前顺序不保证这些自动激活尝试发生前已有 GE 初始属性值。具体属性数值取决于效果资产及角色默认类引用，文件存在不能证明配置正确。
+玩家和敌人均在服务端执行完 `GiveStartupAbilities()` 后调用本函数。因此授予回调可能先尝试激活，再应用初始 GE。玩家蓝图和敌人基蓝图的默认值均引用 `GE_Initialize_Attributes`，效果修饰量待核验。
 
 ## OnASCInitialized：数据引用通知
 
@@ -146,9 +146,9 @@ flowchart TD
 flowchart TD
     base["角色基类 HandleDeath"] -->|"写入本端存活标志"| alive["bAlive = false"]
     asc["本端 ASC 的属性变化"] -->|"该代理已订阅时广播新旧值"| task["UGAS_AttributeChangeTask"]
-    task -.->|"异步节点与死亡判断连接待核验"| listen["GA_GAS_ListebForHealthChange"]
+    listen["GA_GAS_ListebForHealthChange"] -->|"事件图包含监听工厂节点"| task
     listen -.->|"死亡能力激活方式待核验"| abilities["GA_GAS_Death 与敌人死亡能力"]
     abilities -.->|"效果、状态标签与动画配置待核验"| assets["GE_Death / Status.Dead / AM_Death_Melee 与 Ranged"]
 ```
 
-C++ 角色回调与异步代理各自订阅 ASC。当前 `HandleDeath()` 实现写入 `bAlive` 并输出调试文字。死亡能力、效果和动画的蓝图连接仍待编辑器核验。参见 [属性监听代理](../Tasks/AttributeChangeTask.md) 与 [资源索引](../Game/ProjectSetup.md)。
+C++ 角色回调与异步代理各自订阅 ASC。当前 `HandleDeath()` 实现写入 `bAlive` 并输出调试文字。死亡能力、效果和动画的蓝图连接仍待编辑器核验。参见 [属性监听代理](../Tasks/AttributeChangeTask.md) 与 [死亡蓝图设置](../AbilitySystem/DeathBlueprints.md)。

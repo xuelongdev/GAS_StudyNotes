@@ -110,6 +110,12 @@ flowchart TD
     hit -.->|"是否调用缓存函数并传入事件 Instigator，待核验"| cache["CacheHitDirectionVector"]
 ```
 
-本类没有重写 `ActivateAbility()`，也没有在 C++ 内把查询函数直接连接到发送函数。业务资产 `GA_GAS_Primary.uasset` 的父类、调用时机和事件接收配置仍需在编辑器核验。
+本类没有重写 `ActivateAbility()`，也没有在 C++ 内把查询函数直接连接到发送函数。调用时机和事件接收引脚见下方蓝图设置。
 
 参见：[UGAS_HitReact](HitReact.md)、[GAS_Tags](../Tags/GameplayTags.md)、[事件关系索引](GameplayEvents.md)。
+
+## GA_GAS_Primary 的蓝图设置
+
+`/Game/GAS_Learning/Blueprints/AbilitySystem/Abilities/PlayerAbilities/GA_GAS_Primary` 的父类为 `UGAS_Primary`。已保存的 Ability Asset Tag 为 `GAS_Tags.Abilities.Primary`，Instancing Policy 为 Instanced Per Actor。
+
+事件图保存了 `WaitGameplayEvent`、两个蒙太奇任务节点、`HitBoxOverlapTest`、`SendHitReactEventToActors`、`GetAbilityLevel`、`MakeOutgoingSpec`、`BP_ApplyGameplayEffectSpecToTarget` 等节点。资产引用包含 `AM_GAS_Primary_A`、`AM_GAS_Primary_B` 和 `GE_PlayerDamage`。节点之间的具体执行、目标数组与等级输入连线待核验。参见 [动画与事件](GameplayEvents.md)。

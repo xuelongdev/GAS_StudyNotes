@@ -31,7 +31,20 @@ flowchart TD
     match -->|"键和值分别匹配时，由组件刷新"| read["OnAttributeChange"]
     set["本端 UGAS_AttributeSet"] -->|"提供当前值与上限"| read
     read -->|"传递两个浮点数"| event["BP_OnAttributeChange"]
-    event -.->|"事件图与父类待核验"| bar["BP_HealthBar / BP_ManaBar"]
+    event -->|"两项控件蓝图均保存事件覆盖节点"| bar["BP_HealthBar / BP_ManaBar"]
+    bar -.->|"节点已核验，执行与数据引脚待核验"| percent["SafeDivide / SetPercent"]
 ```
 
 参见 [控件组件](WidgetComponent.md)。
+
+## UI 蓝图设置
+
+资产位于 `/Game/GAS_Learning/UI`。三个控件蓝图的父类均为 `UGAS_AttributeWidget`。
+
+| 蓝图 | 已核验的数据 |
+| --- | --- |
+| BP_HealthBar | Attribute 为 Health，MaxAttribute 为 MaxHealth |
+| BP_ManaBar | Attribute 为 Mana，MaxAttribute 为 MaxMana |
+| BP_PlayerStatsWidget | 资产引用 BP_HealthBar 与 BP_ManaBar |
+
+血条和法力条的事件图都保存了 `BP_OnAttributeChange`、`SafeDivide` 和 `SetPercent` 节点。具体引脚连线待编辑器核验。

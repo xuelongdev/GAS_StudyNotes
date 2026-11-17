@@ -46,11 +46,11 @@ flowchart TD
     base -->|"被继承"| hit["UGAS_HitReact"]
     primary -->|"HitBoxOverlapTest 按同一开关调用"| draw["DrawHitBoxOverlapDebugs"]
     hit -->|"CacheHitDirectionVector 写入"| vectors["AvatarForward 与 ToInstigator"]
-    primary -.->|"能力资产父类，待核验"| primaryAsset["GA_GAS_Primary"]
-    hit -.->|"能力资产父类及派生关系，待核验"| hitAsset["GA_GAS_HitReact / Melee / Ranged"]
+    primary -->|"资产保存的父类关系"| primaryAsset["GA_GAS_Primary"]
+    hit -->|"资产保存的父类关系"| hitAsset["GA_GAS_HitReact"]
 ```
 
-本类输出屏幕提示，[Primary](Primary.md) 输出球形范围和结果调试图；它们读取同名继承属性。[HitReact](HitReact.md) 本身没有额外的方向绘制逻辑。派生蓝图是否保留父类激活调用及开关值，需要在编辑器核验。
+本类的激活提示和 Primary 的调试球均读取 `bDrawDebugs`。生命值监听蓝图与基础死亡蓝图保存了 `bDrawDebugs = true`。派生蓝图是否调用父类激活入口仍待核验。参见 [Primary](Primary.md)、[HitReact](HitReact.md) 和 [死亡蓝图设置](DeathBlueprints.md)。
 
 ## 与授予和自动激活的关系
 

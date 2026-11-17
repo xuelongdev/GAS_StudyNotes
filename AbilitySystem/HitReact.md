@@ -52,3 +52,9 @@ flowchart TD
 [UGAS_BlueprintLibrary](../Utils/BlueprintLibrary.md) 提供方向判定与名称映射。本类不直接调用这些工具，不选择动画、不播放蒙太奇、不结算伤害，也不自行结束能力。
 
 业务资源包括 `GA_GAS_HitReact`、`GA_GAS_HitReact_Melee`、`GA_GAS_HitReact_Ranged`，以及 `AM_HitReact_Melee`、`AM_HitReact_Ranged`。它们的父类、事件触发条件、方向与动画的对应关系、网络执行端和结束逻辑仍需编辑器核验。详见 [事件关系索引](GameplayEvents.md)。
+
+## 受击能力蓝图设置
+
+资产路径以 `/Game/GAS_Learning/Blueprints/AbilitySystem/Abilities/EnemyAbilities` 为根。`GA_GAS_HitReact` 继承 `UGAS_HitReact`，AssetTags 保存 `GAS_Tags.Abilities.ActivateOnGiven` 与 `GAS_Tags.Abilities.Enemy.HitReact`，Instancing Policy 为 Instanced Per Actor，Net Execution Policy 为 Server Initiated。
+
+`GA_GAS_HitReact_Melee` 的 `HitReactMontage` 为 `AM_HitReact_Melee`，`GA_GAS_HitReact_Ranged` 的同名字段为 `AM_HitReact_Ranged`。基础受击蓝图的事件图保存了 `WaitGameplayEvent`、`CacheHitDirectionVector`、`GetHitDirection`、`GetHitDirectionName` 和蒙太奇任务节点。事件数据、方向计算与播放之间的引脚连线待核验。

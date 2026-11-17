@@ -44,7 +44,9 @@ flowchart TD
     handler -->|"传出属性标识、新值、旧值"| broadcast["OnAttributeChanged.Broadcast"]
     endTask["EndTask"] -->|"ASC 仍有效时 RemoveAll(this)"| clear["移除原生绑定"]
     endTask -->|"准备销毁并标记垃圾回收"| destroy["代理结束"]
-    listener["GA_GAS_ListebForHealthChange 资产"] -.->|"节点使用及结束调用待编辑器核验"| factory
+    listener["GA_GAS_ListebForHealthChange 资产"] -->|"事件图保存对该工厂的异步节点引用"| factory
 ```
 
 控件组件与角色的本地监听分别直接绑定 ASC 委托。相关入口见 [控件组件](../UI/WidgetComponent.md) 和 [角色基类](../Characters/CharacterBase.md)。
+
+监听能力蓝图同时保存了 `ListenForAttributeChange` 和 `EndTask` 节点。实际结束绑定与激活时序见 [死亡与监听蓝图](../AbilitySystem/DeathBlueprints.md)。
