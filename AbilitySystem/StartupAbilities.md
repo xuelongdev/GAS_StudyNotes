@@ -109,3 +109,5 @@ flowchart TD
 | 前后左右与名称 | BlueprintLibrary.GetHitDirection / GetHitDirectionName |
 
 界面绑定可从角色通知、根控件实例、`AttributeMap` 与 ASC 监听句柄逐项核对。生命值归零处理归入角色基类。
+
+角色蓝图的启动能力配置及自动激活消费者见 [敌人索敌](SearchForTarget.md) 和 [死亡与生命值监听蓝图](DeathBlueprints.md)。击杀事件的实际发送条件与 Payload 见 [属性集](AttributeSet.md)。

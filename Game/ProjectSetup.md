@@ -1,6 +1,6 @@
 # 配置文件、构建类与资源索引
 
-本页按实际文件归档非玩法类内容。参考项目为 `..\GAS_Learning`，核对日期：2026-11-17。
+本页按实际文件归档非玩法类内容。参考项目为 `..\GAS_Learning`，核对日期：2026-11-18。
 
 ## GAS_Learning.uproject
 
@@ -8,7 +8,7 @@
 
 ## GAS_Learning.Build.cs：GAS_Learning
 
-构建规则类继承 `ModuleRules`。构造函数设置 `PCHUsageMode.UseExplicitOrSharedPCHs`；公开依赖为 Core、CoreUObject、Engine、InputCore、EnhancedInput、GameplayAbilities、GameplayTags、GameplayTasks、UMG，私有依赖数组为空。
+构建规则类继承 `ModuleRules`。构造函数设置 `PCHUsageMode.UseExplicitOrSharedPCHs`；公开依赖为 Core、CoreUObject、Engine、InputCore、EnhancedInput、GameplayAbilities、GameplayTags、GameplayTasks、UMG，私有依赖为 AIModule。
 
 | 模块 | 项目中的使用者 |
 | --- | --- |
@@ -88,6 +88,7 @@ Blueprints/
   Game/BP_GAS_Gamemode.uasset
   Player/BP_GAS_PlayerController.uasset
   Player/BP_GAS_PlayerState.uasset
+  Player/BP_EnemyController.uasset
   Characters/
     Player/
       BP_GAS_PlayerCharacter.uasset
@@ -105,6 +106,7 @@ Blueprints/
       Anim/AM_HitReact_Ranged.uasset
       Anim/AM_Death_Melee.uasset
       Anim/AM_Death_Ranged.uasset
+      Anim/AM_Attack_Ranged.uasset
   Notifies/AN_SendEventToActor.uasset
   Input/
     IMC_Movement.uasset
@@ -119,6 +121,7 @@ Blueprints/
   AbilitySystem/
     GameplayEffects/GE_Initialize_Attributes.uasset
     GameplayEffects/GE_Death.uasset
+    GameplayEffects/GE_ResetAttributes.uasset
     GameplayEffects/Player/GE_PlayerDamage.uasset
     GameplayEffects/Player/CT_PlayerDamage.uasset
     Abilities/
@@ -127,15 +130,18 @@ Blueprints/
       PlayerAbilities/GA_GAS_Primary.uasset
       PlayerAbilities/GA_Secondary.uasset
       PlayerAbilities/GA_Teriary.uasset
+      PlayerAbilities/GA_GAS_LitenForKillScored.uasset
       EnemyAbilities/GA_GAS_HitReact.uasset
-      EnemyAbilities/GA_GAS_HitReact_Melee.uasset
-      EnemyAbilities/GA_GAS_HitReact_Ranged.uasset
-      EnemyAbilities/GA_GAS_Death_Melee.uasset
-      EnemyAbilities/GA_GAS_Death_Ranged.uasset
+      EnemyAbilities/Melee/GA_GAS_HitReact_Melee.uasset
+      EnemyAbilities/Ranged/GA_GAS_HitReact_Ranged.uasset
+      EnemyAbilities/Melee/GA_GAS_Death_Melee.uasset
+      EnemyAbilities/Ranged/GA_GAS_Death_Ranged.uasset
+      EnemyAbilities/Ranged/GA_GAS_Attack_Ranged.uasset
+      EnemyAbilities/GA_GAS_SearchForTarget.uasset
 ```
 
 `/Game/...` 对应磁盘 `Content/...`；GameMode 路径的 `_C` 指蓝图生成类。上述资源均已核对文件路径。蓝图父类、已保存的默认引用及通知配置记录在对应类或资产笔记中。
 
 玩法类的完整文件索引见 [README](../README.md)，成员与函数说明保留在各类笔记中。
 
-角色的初始效果引用、输入映射与 UI 类型已从资产数据核验。效果修饰量和蓝图执行引脚连接留在对应专题中标注。
+角色的初始效果引用、输入映射与 UI 类型已从资产数据核验。初始化、重置和玩家伤害的修饰量见 [属性效果设置](../AbilitySystem/GameplayEffects.md)。

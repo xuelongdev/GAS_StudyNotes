@@ -24,7 +24,32 @@
 | MarkAttributesInitialized() | 普通 C++ 函数 | 首次调用时置位并广播 |
 | OnRep_AttributesInitialized() | UFUNCTION | 标记复制回调；为 true 时广播 |
 
-`FAttributesInitialized` 在类外通过 `DECLARE_DYNAMIC_MULTICAST_DELEGATE` 声明。本类没有自定义构造函数、固定初始数值、范围钳制、死亡判断或伤害结算；属性名称不会自动建立 Health / MaxHealth 或 Mana / MaxMana 的数值约束。
+`FAttributesInitialized` 在类外通过 `DECLARE_DYNAMIC_MULTICAST_DELEGATE` 声明。本类没有自定义构造函数、固定初始数值、范围钳制或伤害计算；属性名称不会自动建立 Health / MaxHealth 或 Mana / MaxMana 的数值约束。
+
+## PostGameplayEffectExecute 与击杀事件
+
+函数先调用父类。当 GE 执行修改的是 Health 且当前值小于等于 0 时，向效果上下文的 Instigator 发送 `GAS_Tags.Events.KillScored`，Payload.Instigator 填被影响目标的 Avatar。代码按当前值检查，同一目标在零血时再次满足条件仍可发送。触发端随效果执行，客户端的属性 OnRep 路径只处理数值复制。
+
+摘自 `GAS_AttributeSet.cpp` 的 `PostGameplayEffectExecute()`，保留父类回调之后的完整条件分支。
+
+```cpp
+if (Data.EvaluatedData.Attribute == GetHealthAttribute() && GetHealth() <= 0.f)
+{
+    FGameplayEventData Payload;
+    Payload.Instigator = Data.Target.GetAvatarActor();
+    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Data.EffectSpec.GetEffectContext().GetInstigator(),GAS_Tags::Events::KillScored,Payload);
+}
+```
+
+```mermaid
+flowchart TD
+    effect["GE 执行回调"] -->|"Health 被修改且当前值小于等于零"| send["SendGameplayEventToActor"]
+    target["被影响角色的 Avatar"] -->|"作为 Payload.Instigator"| send
+    send -->|"以效果上下文 Instigator 为接收者"| asc["接收者 ASC：KillScored"]
+    asc -.->|"等待节点已保存，事件引脚与回调待核验"| listener["GA_GAS_LitenForKillScored"]
+```
+
+监听蓝图位于 `/Game/GAS_Learning/Blueprints/AbilitySystem/Abilities/PlayerAbilities/GA_GAS_LitenForKillScored`。它在玩家启动数组中，保存 ActivateOnGiven、Instanced Per Actor、Server Initiated 属性，图中含 WaitGameplayEvent 节点和 KillScored 标签。参见 [玩家角色](../Characters/PlayerCharacter.md)。
 
 ## ATTRIBUTE_ACCESSORS：属性访问器
 

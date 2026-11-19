@@ -1,6 +1,6 @@
 # GAS_StudyNotes
 
-按参考项目 `..\GAS_Learning` 当前类文件组织的 GAS 学习笔记。核对日期：2026-11-17；项目声明引擎版本：**Unreal Engine 5.6**。
+按参考项目 `..\GAS_Learning` 当前类文件组织的 GAS 学习笔记。核对日期：2026-11-18；项目声明引擎版本：**Unreal Engine 5.6**。
 
 ## 类文件索引
 
@@ -9,7 +9,7 @@
 | 类文件 | 类 | 笔记 |
 | --- | --- | --- |
 | `Characters/GAS_BaseCharacters` | `AGAS_BaseCharacters` | [数据接口、委托、启动能力与初始属性效果](Characters/CharacterBase.md) |
-| `Characters/GAS_PlayerCharacter` | `AGAS_PlayerCharacter` | [摄像机、ASC / AS 访问与两端初始化](Characters/PlayerCharacter.md) |
+| `Characters/Player/GAS_PlayerCharacter` | `AGAS_PlayerCharacter` | [摄像机、ASC / AS 访问与两端初始化](Characters/PlayerCharacter.md) |
 | `Characters/Enemy/GAS_EnemyCharacter` | `AGAS_EnemyCharacter` | [自身 ASC、BeginPlay 与服务端授予](Characters/EnemyCharacter.md) |
 | `Player/GAS_PlayerState` | `AGAS_PlayerState` | [玩家 ASC / AS 的创建与复制设置](Player/PlayerState.md) |
 | `Player/GAS_PlayerController` | `AGAS_PlayerController` | [输入成员、绑定与能力激活](Player/PlayerController.md) |
@@ -21,6 +21,8 @@
 | `AbilitySystem/Abilities/Player/GAS_Primary` | `UGAS_Primary` | [命中查询、事件发送与调试绘制](AbilitySystem/Primary.md) |
 | `AbilitySystem/Abilities/Enemy/GAS_HitReact` | `UGAS_HitReact` | [方向向量缓存与调用边界](AbilitySystem/HitReact.md) |
 | `Tasks/GAS_AttritubeChangeTask` | `UGAS_AttributeChangeTask` | [蓝图异步属性监听与结束清理](Tasks/AttributeChangeTask.md) |
+| `AbilitySystem/Abilities/Enemy/GAS_SearchForTarget` | `UGAS_SearchForTarget` | [服务端索敌、移动与攻击](AbilitySystem/SearchForTarget.md) |
+| `AbilitySystem/AbilityTasks/GAS_WaitGameplayEvent` | `UGAS_WaitGameplayEvent` | [接收攻击结束事件](AbilitySystem/WaitGameplayEvent.md) |
 | `Utils/GAS_BlueprintLibrary` | `UGAS_BlueprintLibrary` | [方向枚举、判定与名称映射](Utils/BlueprintLibrary.md) |
 
 ## 非类文件与关系索引
@@ -33,6 +35,7 @@
 | 角色、PlayerState、ASC 与 Controller | [跨类授予及激活关系](AbilitySystem/StartupAbilities.md) |
 | 标签、能力类、动画与通知资产 | [事件关系索引](AbilitySystem/GameplayEvents.md) |
 | 生命值监听、死亡能力、效果和动画 | [死亡蓝图设置](AbilitySystem/DeathBlueprints.md) |
+| 初始化、重置与玩家伤害的 Gameplay Effects | [属性效果设置](AbilitySystem/GameplayEffects.md) |
 
 ## 类间职责关系
 
@@ -68,6 +71,6 @@ flowchart TD
 
 蓝图设置以资产注册信息、类默认对象、组件模板、输入映射与事件图节点数据为依据。虚线表示尚待核验的执行或数据连接。
 
-当前源码覆盖属性初始化、复制、控件刷新、蓝图异步属性监听、能力等级更新和生命值归零处理。初始效果资产、UI 资产和伤害相关资源已按磁盘文件核对。蓝图挂载、属性对、效果数值和伤害资产的调用关系需在编辑器核验。参见 [项目配置与资源索引](Game/ProjectSetup.md)。
+当前源码覆盖属性初始化、复制、控件刷新、蓝图异步属性监听、能力等级更新、生命值归零处理、击杀事件与服务端索敌。笔记记录了 UI 组件属性对、效果修饰量及升级事件的网络标志。攻击与复活事件图的具体引脚连线仍待编辑器核验。参见 [项目配置与资源索引](Game/ProjectSetup.md)。
 
 业务资源和地图路径均使用 `GAS_Learning`，旧脚本包名称保留在重定向配置中。

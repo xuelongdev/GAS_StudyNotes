@@ -1,8 +1,12 @@
 # GAS_Tags.h / GAS_Tags.cpp
 
-这两个文件不定义 UObject 类。`GAS_Tags.h` 通过 `NativeGameplayTags.h` 声明原生标签变量，`GAS_Tags.cpp` 在相同命名空间内定义完整字符串。核对日期：2026-11-16。
+这两个文件不定义 UObject 类。`GAS_Tags.h` 通过 `NativeGameplayTags.h` 声明原生标签变量，`GAS_Tags.cpp` 在相同命名空间内定义完整字符串。核对日期：2026-11-18。
 
 源码目录：`Source/GAS_Learning/GameplayTags`。
+
+## CharacterType 命名空间
+
+`GAS_Tags::CharacterType::Player` 注册为 `GAS_Tags.CharacterType.Player`。玩家构造函数将名称写入 Actor Tags，服务端索敌通过名称匹配 Actor。参见 [最近目标查询](../Utils/BlueprintLibrary.md)。
 
 ## Abilities：能力标识与自动激活约定
 
@@ -13,6 +17,7 @@
 | `Abilities::Primary` | `GAS_Tags.Abilities.Primary` | PlayerController.Primary |
 | `Abilities::Secondary` | `GAS_Tags.Abilities.Secondary` | PlayerController.Secondary |
 | `Abilities::Tertiary` | `GAS_Tags.Abilities.Tertiary` | PlayerController.Tertiary |
+| `Abilities::Enemy::Attack` | `GAS_Tags.Abilities.Enemy.Attack` | SearchForTarget.Attack 查询，远程攻击蓝图以此作为 Asset Tag |
 | `Abilities::Enemy::HitReact` | `GAS_Tags.Abilities.Enemy.HitReact` | 已注册；自定义 C++ 没有直接引用该变量的调用 |
 
 `ActivateOnGiven` 是 ASC 使用的约定，能力资产需在自身 AssetTags 中持有该标签才会匹配。其检查代码归入 [UGAS_AbilitySystemComponent](../AbilitySystem/AbilitySystemComponent.md)。
@@ -21,6 +26,8 @@
 
 | C++ 变量（前缀 GAS_Tags::） | 完整注册字符串 |
 | --- | --- |
+| `Events::KillScored` | `GAS_Tags.Events.KillScored` |
+| `Events::Enemy::EndAttack` | `GAS_Tags.Events.Enemy.EndAttack` |
 | `Events::Player::Primary` | `GAS_Tags.Events.Primary` |
 | `Events::Enemy::HitReact` | `GAS_Tags.Events.Enemy.HitReact` |
 
@@ -48,6 +55,7 @@ namespace Player
 ```cpp
 namespace Enemy
 {
+    UE_DEFINE_GAMEPLAY_TAG_COMMENT(Attack, "GAS_Tags.Abilities.Enemy.Attack", "Tag for the Enemy Attack Ability");
     UE_DEFINE_GAMEPLAY_TAG_COMMENT(HitReact, "GAS_Tags.Abilities.Enemy.HitReact", "Tag for the Enemy HitReact Ability");
 }
 ```
@@ -66,7 +74,9 @@ flowchart TD
     handler -->|"命中约定标签时按 Spec.Handle"| activate["TryActivateAbility"]
     definitions -->|"注册能力标识与状态标识"| death["Abilities.Death / Status.Dead"]
     death -.->|"标签赋予、阻止规则与资产引用待核验"| deathAssets["死亡能力与 GE_Death"]
-    definitions -->|"注册两个独立的事件标识"| events["Player.Primary / Enemy.HitReact"]
+    definitions -->|"注册主攻击与受击事件"| events["Player.Primary / Enemy.HitReact"]
+    definitions -->|"KillScored 用于属性集发送"| kill["AttributeSet.PostGameplayEffectExecute"]
+    definitions -->|"EndAttack 用于服务端等待"| endAttack["SearchForTarget 的事件代理"]
     events -->|"Enemy.HitReact 由该函数引用"| send["Primary.SendHitReactEventToActors"]
     send -->|"逐目标发送，Instigator 为发起 Avatar"| target["目标 ASC.HandleGameplayEvent"]
     target -.->|"能力事件触发或监听配置，待核验"| assets["蓝图接收逻辑"]

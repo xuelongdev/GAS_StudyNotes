@@ -4,7 +4,7 @@
 
 当前 PlayerState 实际创建的是 `UGAS_AbilitySystemComponent`。玩家通过接口访问该组件；与敌人自身持有组件的方式对照见 [敌人角色](EnemyCharacter.md)。
 
-源码：`Source/GAS_Learning/Characters/GAS_PlayerCharacter.h`、`GAS_PlayerCharacter.cpp`。
+源码：`Source/GAS_Learning/Characters/Player/GAS_PlayerCharacter.h`、`GAS_PlayerCharacter.cpp`。
 
 ## 头文件：成员与函数
 
@@ -21,7 +21,7 @@
 
 ## AGAS_PlayerCharacter：胶囊体与摄像机
 
-摘自 `Source/GAS_Learning/Characters/GAS_PlayerCharacter.cpp` 的构造函数，仅保留摄像机创建和挂接部分，省略空行：
+摘自 `Source/GAS_Learning/Characters/Player/GAS_PlayerCharacter.cpp` 的构造函数，仅保留摄像机创建和挂接部分，省略空行：
 
 ```cpp
 CameraBoom = CreateDefaultSubobject<USpringArmComponent>(FName("CameraBoom"));
@@ -156,19 +156,22 @@ flowchart TD
 
 ## BP_GAS_PlayerCharacter 的蓝图设置
 
-资产路径为 `/Game/GAS_Learning/Blueprints/Characters/Player/BP_GAS_PlayerCharacter`，父类为 `AGAS_PlayerCharacter`。类默认值的 `InitializeAttributesEffect` 指向 `GE_Initialize_Attributes`，`StartupAbilities` 依次为 `GA_GAS_Primary`、`GA_Secondary`、`GA_Teriary`、`GA_GAS_ListebForHealthChange`。
+资产路径为 `/Game/GAS_Learning/Blueprints/Characters/Player/BP_GAS_PlayerCharacter`，父类为 `AGAS_PlayerCharacter`。类默认值的 `InitializeAttributesEffect` 指向 `GE_Initialize_Attributes`，`StartupAbilities` 依次为 `GA_GAS_Primary`、`GA_Secondary`、`GA_Teriary`、`GA_GAS_ListebForHealthChange`、`GA_GAS_LitenForKillScored`。
 
 蓝图的 `BP_GAS_WidgetComponent` 组件设为 Screen，Widget Class 为 `BP_PlayerStatsWidget`，开启 Draw at Desired Size。组件的 `AttributeMap` 保存 Health 对 MaxHealth、Mana 对 MaxMana 两组映射。
 
-事件图记录了 `IA_LevelUpAbility`、`LevelUpAbility`、`GetAbilitySystemComponent` 和 `AddAbilityLevel` 相关节点。升级目标类、增量、执行引脚和网络转发待编辑器核验。
+事件图保存了 `IA_LevelUpAbility`、`LevelUpAbility`、`GetAbilitySystemComponent` 和 `AddAbilityLevel` 节点。`LevelUpAbility` 的序列化函数标志包含 `Net`、`NetServer`，未设置 `NetReliable`，对应 Run on Server 且 Reliable 未勾选。输入事件是否调用该 RPC、升级的目标类和增量仍待核验。
 
 ```mermaid
 flowchart TD
     player["BP_GAS_PlayerCharacter 默认值"] -->|"InitializeAttributesEffect"| ge["GE_Initialize_Attributes"]
-    player -->|"StartupAbilities 数组，服务端授予时读取"| spec["Primary / Secondary / Teriary / 生命值监听"]
+    player -->|"StartupAbilities 数组，服务端授予时读取"| spec["Primary / Secondary / Teriary / 生命值监听 / 击杀监听"]
     player -->|"Screen 组件的 Widget Class"| ui["BP_PlayerStatsWidget"]
     imc["IMC_Abilities"] -->|"L 映射"| action["IA_LevelUpAbility"]
-    action -.->|"事件节点至升级函数的执行连线待核验"| level["AddAbilityLevel"]
+    action -.->|"输入事件至 RPC 引脚待核验"| rpc["LevelUpAbility：Run on Server，Unreliable"]
+    rpc -.->|"执行连线、目标类与增量待核验"| level["AddAbilityLevel"]
 ```
 
 参见 [ASC 等级接口](../AbilitySystem/AbilitySystemComponent.md) 和 [属性控件](../UI/AttributeWidget.md)。
+
+构造函数将 `GAS_Tags::CharacterType::Player.GetTagName()` 写入 Actor 的 `Tags`，供敌人按 Actor Tag 查询。参见 [最近目标查询](../Utils/BlueprintLibrary.md) 和 [击杀事件](../AbilitySystem/AttributeSet.md)。

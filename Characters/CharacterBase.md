@@ -13,6 +13,10 @@
 | public virtual | `GetAttributeSet() const` | 头文件内联默认返回 nullptr，派生类提供属性集 |
 | public | `FASCInitialized OnASCInitialized` | ASC 与属性集的本端动态多播通知 |
 | protected | `GiveStartupAbilities()` | 取得派生类提供的 ASC，逐项授予 |
+| public override | `GetLifetimeReplicatedProps()` | 注册 bAlive 复制 |
+| public BlueprintCallable | `HandleRespawn()` / `ResetAttributes()` | 恢复存活标志 / 应用重置 GE |
+| public BlueprintImplementableEvent | `RotateToTarget(AActor*)` | 由蓝图实现转向 |
+| private | `ResetAttributesEffect` | EditDefaultsOnly，保存属性重置 GE |
 | protected | `InitializeAttributes()` | 创建初始化 GE Spec 并对自身应用 |
 | private | `TSubclassOf<UGameplayEffect> InitializeAttributesEffect` | EditDefaultsOnly，GAS\|Effects；初始属性效果类 |
 | private | `StartupAbilities` | EditDefaultsOnly，GAS\|Abilities；保存 UGameplayAbility 子类数组 |
@@ -104,7 +108,7 @@ if (UGAS_AttributeSet* Attributes = Cast<UGAS_AttributeSet>(GetAttributeSet()))
 
 函数要求 `InitializeAttributesEffect` 是有效效果类，构造等级 1 的 Spec，再应用到当前 ASC。检查 ASC 之前先执行 `checkf`；函数检查 `SpecHandle.IsValid()` 后才解引用 Data。应用调用返回后，若属性集可转型为 `UGAS_AttributeSet`，则调用 `MarkAttributesInitialized()`。
 
-玩家和敌人均在服务端执行完 `GiveStartupAbilities()` 后调用本函数。因此授予回调可能先尝试激活，再应用初始 GE。玩家蓝图和敌人基蓝图的默认值均引用 `GE_Initialize_Attributes`，效果修饰量待核验。
+玩家和敌人均在服务端执行完 `GiveStartupAbilities()` 后调用本函数，因此授予回调可能先尝试激活，再应用初始 GE。玩家蓝图和敌人基蓝图均引用 `GE_Initialize_Attributes`，将四项属性分别覆盖为 100。参见 [属性效果设置](../AbilitySystem/GameplayEffects.md)。
 
 ## OnASCInitialized：数据引用通知
 
@@ -126,17 +130,19 @@ flowchart TD
 
 玩家的服务端及客户端角色实例分别在各自回调中绑定 Health 委托。敌人的角色绑定位于 `BeginPlay()` 权威端分支。
 
-头文件将 `bAlive` 定义为默认 true 的私有布尔值。`IsAlive()` 与 `SetAlive(bool)` 是公开内联访问入口。受保护的 `OnHealthChanged()` 在新值小于或等于零时调用 `HandleDeath()`。后者将 `bAlive` 置为 false，并在 GEngine 有效时显示三秒的红色调试文字。公开的 BlueprintCallable `HandleRespawn()` 将 `bAlive` 恢复为 true。
+头文件将 `bAlive` 定义为默认 true、蓝图可读的私有布尔值，并在 `GetLifetimeReplicatedProps()` 中通过 `DOREPLIFETIME` 注册。`IsAlive()` 与 `SetAlive(bool)` 是公开内联访问入口。受保护的 `OnHealthChanged()` 在新值小于或等于零时调用 `HandleDeath()`。基类实现将 `bAlive` 置为 false，敌人重写后还会停止 AI 移动。公开的 BlueprintCallable `HandleRespawn()` 将 `bAlive` 恢复为 true。
 
 ```mermaid
 flowchart TD
     health["ASC Health 变化"] -->|"将 NewValue 传给已绑定的角色"| change["OnHealthChanged"]
     change -->|"NewValue 小于或等于零"| death["HandleDeath"]
-    death -->|"写入 false，并按 GEngine 状态输出调试信息"| alive["本端 bAlive"]
+    death -->|"写入 false"| alive["bAlive"]
+    alive -->|"权威端状态经属性复制下发"| client["客户端 bAlive"]
+    death -->|"派生敌人重写，在父类逻辑后"| ai["AIController.StopMovement"]
     respawn["HandleRespawn"] -->|"写入 true"| alive
 ```
 
-`bAlive` 由本端代码写入。重复收到非正生命值回调会再次执行死亡处理。`HandleRespawn()` 的实现范围是存活标志，实际重生行为取决于调用者。
+玩家两端的 Health 回调都可在本端写入标志。敌人的 Health 绑定位于服务端分支。重复收到非正生命值回调会再次执行死亡处理。
 
 参见：[属性集](../AbilitySystem/AttributeSet.md)、[Widget 组件](../UI/WidgetComponent.md)、[初始化关系索引](../AbilitySystem/StartupAbilities.md)。
 
@@ -151,4 +157,10 @@ flowchart TD
     abilities -.->|"效果、状态标签与动画配置待核验"| assets["GE_Death / Status.Dead / AM_Death_Melee 与 Ranged"]
 ```
 
-C++ 角色回调与异步代理各自订阅 ASC。当前 `HandleDeath()` 实现写入 `bAlive` 并输出调试文字。死亡能力、效果和动画的蓝图连接仍待编辑器核验。参见 [属性监听代理](../Tasks/AttributeChangeTask.md) 与 [死亡蓝图设置](../AbilitySystem/DeathBlueprints.md)。
+C++ 角色回调与异步代理各自订阅 ASC。基类 `HandleDeath()` 写入 `bAlive`。死亡能力、效果和动画的蓝图连接仍待编辑器核验。参见 [属性监听代理](../Tasks/AttributeChangeTask.md) 与 [死亡蓝图设置](../AbilitySystem/DeathBlueprints.md)。
+
+## ResetAttributes 与 RotateToTarget
+
+`ResetAttributes()` 校验 `ResetAttributesEffect`，通过当前 ASC 构造等级 1 的 Spec 并对自身应用。随后对有效的 `UGAS_AttributeSet` 调用 `MarkAttributesInitialized()`，其一次性标记行为仍有效。已保存的敌人基蓝图将重置效果设为 `GE_ResetAttributes`。死亡蓝图保存了 ResetAttributes 与 HandleRespawn 调用节点，执行连线和调用端见 [死亡蓝图设置](../AbilitySystem/DeathBlueprints.md)。
+
+`RotateToTarget()` 接收目标 Actor，由敌人蓝图实现。索敌能力在服务端移动成功后调用此事件。参见 [索敌能力](../AbilitySystem/SearchForTarget.md)。

@@ -97,7 +97,7 @@ flowchart TD
 
 父类、启动能力和血条组件的保存值见下方蓝图设置。Actor 的实际复制表现与动画蓝图运行行为待编辑器验证。
 
-敌人的生命值回调复用基类存活状态处理。AI 行为与动画由对应资产配置，需在编辑器核验。
+敌人的生命值回调复用基类存活状态处理。死亡重写在基类写入存活状态后调用当前 AIController 的 StopMovement。
 
 参见：[角色基类](CharacterBase.md)、[玩家角色](PlayerCharacter.md)、[启动能力](../AbilitySystem/StartupAbilities.md)。
 
@@ -112,8 +112,8 @@ flowchart TD
 | 蓝图 | 父类 | StartupAbilities |
 | --- | --- | --- |
 | BP_GAS_EnemyBase | AGAS_EnemyCharacter | GA_GAS_HitReact |
-| BP_Enemy_Melee | BP_GAS_EnemyBase | GA_GAS_HitReact_Melee、GA_GAS_ListebForHealthChange、GA_GAS_Death_Melee |
-| BP_Enemy_Ranged | BP_GAS_EnemyBase | GA_GAS_HitReact_Ranged、GA_GAS_ListebForHealthChange、GA_GAS_Death_Ranged |
+| BP_Enemy_Melee | BP_GAS_EnemyBase | GA_GAS_HitReact_Melee、GA_GAS_ListebForHealthChange、GA_GAS_Death_Melee、GA_GAS_SearchForTarget |
+| BP_Enemy_Ranged | BP_GAS_EnemyBase | GA_GAS_HitReact_Ranged、GA_GAS_ListebForHealthChange、GA_GAS_Death_Ranged、GA_GAS_SearchForTarget、GA_GAS_Attack_Ranged |
 
 基蓝图的 `InitializeAttributesEffect` 为 `GE_Initialize_Attributes`。基蓝图组件将 `BP_HealthBar` 作为 Widget Class，Space 为 Screen，Draw Size 为 120 × 10，`AttributeMap` 保存 Health 对 MaxHealth。
 
@@ -128,3 +128,9 @@ flowchart TD
 ```
 
 死亡与受击动画资产的赋值见 [死亡与监听设置](../AbilitySystem/DeathBlueprints.md) 和 [受击能力](../AbilitySystem/HitReact.md)。
+
+## AI 参数与蓝图入口
+
+头文件公开可在蓝图读取和编辑的 `AcceptanceRadius`（默认 500）、`MinAttackDelay`（0.1 秒）、`MaxAttackDelay`（0.5 秒），以及由蓝图实现的 `GetTimelineLength()`。`BP_Enemy_Melee` 将接受半径覆写为 80，`BP_Enemy_Ranged` 将搜索延时范围覆写为 0.5～1.2 秒。
+
+`BP_GAS_EnemyBase` 保存 `AIControllerClass = BP_EnemyController` 与 `ResetAttributesEffect = GE_ResetAttributes`。控制器蓝图位于 `/Game/GAS_Learning/Blueprints/Player/BP_EnemyController`，继承 `AAIController`。近战和远程蓝图的 `CharacterMesh0.AnimClass` 分别引用 `ABP_Enemy_Melee` 与 `ABP_Enemy_Ranged`。敌人基蓝图保存 RotateToTarget、SetFacingRotation、GetTimelineLength、朝向计算、四元数插值和 SetActorRotation 节点。时间轴引脚、AI 占有时机与旋转复制待核验。参见 [服务端索敌](../AbilitySystem/SearchForTarget.md)。

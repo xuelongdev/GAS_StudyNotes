@@ -95,3 +95,17 @@ flowchart LR
 ```
 
 虚线关系未在当前 C++ 中直接调用，需在能力蓝图核验；两个静态函数可独立使用，不要求固定连续调用。
+
+## FindClosestActorWithTag
+
+`GAS_BlueprintLibrary.h` 声明蓝图可调用函数和 `FClosestActorWithTagResult`。结果包含弱引用 Actor 和浮点 Distance。函数对匹配 Actor Tag 的对象检查角色类型及存活状态，再比较与 Origin 的三维直线距离。没有有效目标时，返回空 Actor 和 `TNumericLimits<float>::Max()`。
+
+```mermaid
+flowchart TD
+    tag["WorldContext / Origin / GameplayTag"] -->|"以 Tag.GetTagName 查询 Actor Tags"| candidates["GetAllActorsWithTag"]
+    candidates -->|"排除空对象与非存活 GAS 角色"| valid["有效候选"]
+    valid -->|"按 FVector.Dist 取最小值"| result["FClosestActorWithTagResult"]
+    result -->|"服务端索敌读取 Actor"| search["UGAS_SearchForTarget.Search"]
+```
+
+参见 [玩家的 Actor Tag](../Characters/PlayerCharacter.md) 和 [索敌能力](../AbilitySystem/SearchForTarget.md)。

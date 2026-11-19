@@ -55,7 +55,7 @@ UAbilitySystemComponent* AGAS_PlayerState::GetAbilitySystemComponent() const
 
 该 ASC getter 不初始化角色信息。[AGAS_PlayerCharacter](../Characters/PlayerCharacter.md) 的初始化调用把 PlayerState 作为 OwnerActor、当前角色作为 AvatarActor。ASC 的持有者和在场景中作用的角色是两个对象。
 
-这种放置方式便于在 Pawn 更换时继续使用同一个 PlayerState 上的 ASC，但当前项目没有实现完整的死亡、重生、能力清理或状态重置流程。不能由此认定重生功能已经完成。
+这种放置方式支持在 Pawn 更换后重新关联 PlayerState 上的 ASC。死亡能力资产中的复活与属性重置入口见 [死亡蓝图设置](../AbilitySystem/DeathBlueprints.md)。
 
 PlayerState 构造函数创建 ASC 与属性集，并配置 ASC 复制；与具体角色的关联由 [玩家角色](../Characters/PlayerCharacter.md) 的服务端和客户端回调完成。初始 GE 的应用由角色调用基类函数负责。
 

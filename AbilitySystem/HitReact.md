@@ -57,4 +57,4 @@ flowchart TD
 
 资产路径以 `/Game/GAS_Learning/Blueprints/AbilitySystem/Abilities/EnemyAbilities` 为根。`GA_GAS_HitReact` 继承 `UGAS_HitReact`，AssetTags 保存 `GAS_Tags.Abilities.ActivateOnGiven` 与 `GAS_Tags.Abilities.Enemy.HitReact`，Instancing Policy 为 Instanced Per Actor，Net Execution Policy 为 Server Initiated。
 
-`GA_GAS_HitReact_Melee` 的 `HitReactMontage` 为 `AM_HitReact_Melee`，`GA_GAS_HitReact_Ranged` 的同名字段为 `AM_HitReact_Ranged`。基础受击蓝图的事件图保存了 `WaitGameplayEvent`、`CacheHitDirectionVector`、`GetHitDirection`、`GetHitDirectionName` 和蒙太奇任务节点。事件数据、方向计算与播放之间的引脚连线待核验。
+`Melee/GA_GAS_HitReact_Melee` 的 `HitReactMontage` 为 `AM_HitReact_Melee`，`Ranged/GA_GAS_HitReact_Ranged` 的同名字段为 `AM_HitReact_Ranged`。基础受击蓝图的事件图保存了 `WaitGameplayEvent`、`CacheHitDirectionVector`、`GetHitDirection`、`GetHitDirectionName` 和蒙太奇任务节点。事件数据、方向计算与播放之间的引脚连线待核验。

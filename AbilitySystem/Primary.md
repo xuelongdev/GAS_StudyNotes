@@ -118,4 +118,4 @@ flowchart TD
 
 `/Game/GAS_Learning/Blueprints/AbilitySystem/Abilities/PlayerAbilities/GA_GAS_Primary` 的父类为 `UGAS_Primary`。已保存的 Ability Asset Tag 为 `GAS_Tags.Abilities.Primary`，Instancing Policy 为 Instanced Per Actor。
 
-事件图保存了 `WaitGameplayEvent`、两个蒙太奇任务节点、`HitBoxOverlapTest`、`SendHitReactEventToActors`、`GetAbilityLevel`、`MakeOutgoingSpec`、`BP_ApplyGameplayEffectSpecToTarget` 等节点。资产引用包含 `AM_GAS_Primary_A`、`AM_GAS_Primary_B` 和 `GE_PlayerDamage`。节点之间的具体执行、目标数组与等级输入连线待核验。参见 [动画与事件](GameplayEvents.md)。
+事件图保存了 `WaitGameplayEvent`、两个蒙太奇任务节点、`HitBoxOverlapTest`、`SendHitReactEventToActors`、`GetAbilityLevel`、`MakeOutgoingSpec`、`BP_ApplyGameplayEffectSpecToTarget` 等节点。资产引用包含 `AM_GAS_Primary_A`、`AM_GAS_Primary_B` 和 `GE_PlayerDamage`。伤害效果的 Health 修饰量使用 `CT_PlayerDamage.Primary` 曲线，系数为 -1。节点执行、目标数组与等级输入连线待核验。参见 [动画与事件](GameplayEvents.md) 和 [属性效果设置](GameplayEffects.md)。
