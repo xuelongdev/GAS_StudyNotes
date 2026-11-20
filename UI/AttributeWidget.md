@@ -23,7 +23,7 @@ void UGAS_AttributeWidget::OnAttributeChange(const TTuple<FGameplayAttribute, FG
 }
 ```
 
-两个数值都取自本次传入的属性集。比例计算、文本格式与进度条显示属于蓝图事件的实现范围。
+每次刷新时，控件都从传入的属性集读取当前值和上限。蓝图事件负责计算比例、设置文本和更新进度条。
 
 ```mermaid
 flowchart TD

@@ -54,7 +54,7 @@ GiveStartupAbilities();
 InitializeAttributes();
 ```
 
-权限检查位于 `InitAbilityActorInfo()` **之后**。因此，在执行此回调且 ASC 有效的各端实例上都会先初始化上下文，先广播 ASC 与属性集指针，只有权威端继续授予能力并应用初始属性效果。
+只要 ASC 有效，服务端和客户端都会调用 `InitAbilityActorInfo()` 初始化上下文，随后广播 ASC 与属性集指针。权限检查在广播之后，只有权威端会继续授予能力并应用初始属性效果。
 
 ```mermaid
 flowchart TD
@@ -103,7 +103,7 @@ flowchart TD
 
 ## Health 委托的绑定位置
 
-`BeginPlay()` 在服务端初始属性应用之后绑定，客户端在权限分支处结束。 两条角色实现均要求属性集能转型为 `UGAS_AttributeSet`。成功后用 `AddUObject` 将 ASC 的 Health 变化委托交给基类 `OnHealthChanged()`。该绑定接收之后发生的变化，建立时没有主动读取当前 Health 执行死亡判断。参见 [角色基类](CharacterBase.md)。
+`BeginPlay()` 在服务端初始属性应用之后绑定，客户端在权限分支处结束。两条角色实现均要求属性集能转型为 `UGAS_AttributeSet`。成功后用 `AddUObject` 将 ASC 的 Health 变化委托交给基类 `OnHealthChanged()`。该绑定接收之后发生的变化，建立时没有主动读取当前 Health 执行死亡判断。参见 [角色基类](CharacterBase.md)。
 
 ## 敌人蓝图的默认值与组件
 

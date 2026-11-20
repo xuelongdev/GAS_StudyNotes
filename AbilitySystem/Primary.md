@@ -19,7 +19,7 @@
 
 ## HitBoxOverlapTest：查询参数与球心
 
-函数先建立空的 `ActorsHit`。Avatar 或 World 无效时返回此空数组。Avatar 来自 `GetAvatarActorFromActorInfo()`，并被加入忽略列表以排除自身。
+函数用 `ActorsHit` 收集命中的 Actor。Avatar 或 World 无效时，查询直接返回空数组。Avatar 来自 `GetAvatarActorFromActorInfo()`，并被加入忽略列表以排除自身。
 
 摘自 `GAS_Primary.cpp` 的 `HitBoxOverlapTest()`，仅保留响应参数和球体创建部分，省略空行：
 

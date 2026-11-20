@@ -31,7 +31,7 @@ void UGAS_HitReact::CacheHitDirectionVector(AActor* Instigator)
 }
 ```
 
-差值方向是“从受击 Avatar 指向发起者”，不是发起者朝向，也不是相反的入射方向。函数使用完整三维坐标，没有清除 Z 分量。
+用发起者的位置减去受击 Avatar 的位置，得到从受击者指向发起者的方向。计算保留 Z 分量，因此双方的高度差也会影响结果。
 
 只检查了 Avatar，没有检查传入 `Instigator`；调用者必须提供有效 Actor。Avatar 为空时提前返回，已有缓存不会被此分支清空。同位置产生零差值，源码未检查 `Normalize()` 的返回值或额外标记方向是否有效。
 

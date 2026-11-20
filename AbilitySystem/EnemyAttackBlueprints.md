@@ -17,7 +17,7 @@
 
 `Notifies/AN_MeleeAttack` 继承 `UAnimNotifyState`。保存的默认 Socket 为 `FX_Trail_01_R`，球形检测半径为 60。函数图包括 `Received_NotifyTick` 与 `BP_PerformSphereTrace`，含 `GetOwner`、`GetSocketTransform`、`GetForwardVector`、`SphereTraceMulti` 及向量运算节点。
 
-已核对 `Characters/Enemy/Anim/Melee/AM_Attack_Melee_1` 包含该通知实例。通知窗口、检测起终点、忽略列表、命中去重和伤害应用连线待核验。
+`Characters/Enemy/Anim/Melee/AM_Attack_Melee_1` 中有一个该通知的实例。通知窗口、检测起终点、忽略列表、命中去重和伤害应用连线待核验。
 
 ```mermaid
 flowchart TD

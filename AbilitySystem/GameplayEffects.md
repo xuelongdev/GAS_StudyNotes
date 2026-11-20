@@ -12,7 +12,7 @@
 
 玩家蓝图与敌人基蓝图的 `InitializeAttributesEffect` 均指向初始化效果。敌人基蓝图还保存 `ResetAttributesEffect = GE_ResetAttributes`，近战与远程派生蓝图继承该设置。玩家蓝图的默认对象未保存该重置效果字段。C++ 初始化与重置均创建等级 1 的 Spec，并应用到自身 ASC。
 
-伤害修饰量按效果 Spec 等级评估 `Primary` 曲线并乘以 -1。主攻击蓝图保存了 `GetAbilityLevel`、`MakeOutgoingSpec` 和 `BP_ApplyGameplayEffectSpecToTarget` 节点，等级和目标引脚、曲线具体点值仍待核验。
+计算伤害修饰量时，先按效果 Spec 的等级从 `Primary` 曲线取值，再乘以 -1。主攻击蓝图保存了 `GetAbilityLevel`、`MakeOutgoingSpec` 和 `BP_ApplyGameplayEffectSpecToTarget` 节点，等级和目标引脚、曲线具体点值仍待核验。
 
 ```mermaid
 flowchart TD

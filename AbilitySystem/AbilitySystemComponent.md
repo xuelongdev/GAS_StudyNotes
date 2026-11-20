@@ -46,7 +46,7 @@ void UGAS_AbilitySystemComponent::OnRep_ActivateAbilities()
 }
 ```
 
-能力列表复制到客户端后，回调在作用域列表锁内遍历 `GetActivatableAbilities()`。它会检查整个列表，而非只检查变化的一项；源码没有额外记录“已经自动激活过”的集合。
+能力列表复制到客户端后，回调在作用域列表锁内遍历 `GetActivatableAbilities()`。每次回调都会重新检查所有条目。组件没有记录哪些能力已经自动激活过。
 
 ## HandleAutoActivateAbility：精确匹配并尝试激活
 

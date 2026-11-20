@@ -42,7 +42,7 @@ AGAS_PlayerState::AGAS_PlayerState()
 
 ## GetAbilitySystemComponent、GetAttributeSet 与角色调用关系
 
-摘自 `GAS_PlayerState.cpp` 的 `GetAbilitySystemComponent()`，保留完整函数；原函数仅四行，不填充无关代码：
+摘自 `GAS_PlayerState.cpp` 的 `GetAbilitySystemComponent()`，以下为完整函数：
 
 ```cpp
 UAbilitySystemComponent* AGAS_PlayerState::GetAbilitySystemComponent() const

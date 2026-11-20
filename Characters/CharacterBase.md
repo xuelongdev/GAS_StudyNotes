@@ -36,7 +36,7 @@ AGAS_BaseCharacters::AGAS_BaseCharacters()
 }
 ```
 
-当前没有角色逐帧逻辑，因此关闭 Actor Tick。骨骼网格组件使用单独的动画 Tick 设置，源码注释说明其目的是让 Dedicated Server 在模型未被渲染时仍更新姿态和骨骼变换。不能把关闭 Actor Tick 理解为关闭骨骼动画更新。
+角色没有逐帧逻辑，构造函数关闭了 Actor Tick。骨骼网格组件有独立的动画 Tick 设置。按源码注释，Dedicated Server 即使没有渲染模型，也需要更新姿态和骨骼变换。
 
 ## GetAbilitySystemComponent、GetAttributeSet：数据来源
 

@@ -76,7 +76,7 @@ flowchart TD
     component -->|"是"| bindings["BindAction：绑定输入事件和回调"]
 ```
 
-Context 数组为空时仍会继续转型和绑定；图中“遍历结束”也包含没有任何项的情况。
+即使 Context 数组为空，函数也会继续转型输入组件并绑定 Action。
 
 `Config/DefaultInput.ini` 已指定 `EnhancedPlayerInput` 和 `EnhancedInputComponent`。当前 C++ 没有逐项检查 Context / Action 是否为空，编辑器赋值是排查输入无响应的重点。
 

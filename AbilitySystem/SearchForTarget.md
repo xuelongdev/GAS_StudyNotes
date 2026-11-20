@@ -1,6 +1,6 @@
 # UGAS_SearchForTarget
 
-继承 `UGAS_GameplayAbility`。源码为 `Source/GAS_Learning/AbilitySystem/Abilities/Enemy/GAS_SearchForTarget.h` 与同名 `.cpp`。构造函数设置 Instanced Per Actor 和 Server Only。
+继承 `UGAS_GameplayAbility`。源码为 `Source/GAS_Learning/AbilitySystem/Abilities/Enemy/GAS_SearchForTarget.h` 与同名 `.cpp`。构造函数将实例策略设为 Instanced Per Actor，能力只在服务端执行（Server Only）。
 
 | 声明 | 用途 |
 | --- | --- |

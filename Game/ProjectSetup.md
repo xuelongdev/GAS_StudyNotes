@@ -1,6 +1,6 @@
 # 配置文件、构建类与资源索引
 
-本页按实际文件归档非玩法类内容。参考项目为 `..\GAS_Learning`，核对日期：2026-11-18。
+参考项目为 `..\GAS_Learning`，核对日期：2026-11-18。
 
 ## GAS_Learning.uproject
 
@@ -60,7 +60,7 @@ flowchart TD
     map -.->|"地图级 GameMode 覆盖，待核验"| mode
 ```
 
-图中是配置依赖，不表示运行时调用顺序。GameMode 类配置见 [BP_GAS_Gamemode](GameMode.md)。
+图中的箭头表示配置项之间的依赖。GameMode 类配置见 [BP_GAS_Gamemode](GameMode.md)。
 
 ## 脚本模块重定向与资源路径
 

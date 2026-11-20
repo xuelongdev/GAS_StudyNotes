@@ -6,7 +6,7 @@
 
 ## 头文件：属性与函数
 
-四个属性均为 public、`FGameplayAttributeData`、BlueprintReadOnly，各自使用 ReplicatedUsing 指定通知函数。
+四个属性的类型都是 `FGameplayAttributeData`，在 C++ 中公开，并通过 BlueprintReadOnly 标记为蓝图只读。每个属性通过 ReplicatedUsing 指定自己的复制通知函数。
 
 | 属性 | 复制回调 | 访问器宏调用 |
 | --- | --- | --- |
@@ -28,7 +28,7 @@
 
 ## PostGameplayEffectExecute 与击杀事件
 
-函数先调用父类。当 GE 执行修改的是 Health 且当前值小于等于 0 时，向效果上下文的 Instigator 发送 `GAS_Tags.Events.KillScored`，Payload.Instigator 填被影响目标的 Avatar。代码按当前值检查，同一目标在零血时再次满足条件仍可发送。触发端随效果执行，客户端的属性 OnRep 路径只处理数值复制。
+函数先调用父类。当 GE 执行修改的是 Health 且当前值小于等于 0 时，向效果上下文的 Instigator 发送 `GAS_Tags.Events.KillScored`，Payload.Instigator 填被影响目标的 Avatar。如果后续效果再次修改 Health，而修改后的值仍小于等于 0，同一目标仍可能触发击杀事件。触发端随效果执行，客户端的属性 OnRep 路径只处理数值复制。
 
 摘自 `GAS_AttributeSet.cpp` 的 `PostGameplayEffectExecute()`，保留父类回调之后的完整条件分支。
 

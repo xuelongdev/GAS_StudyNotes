@@ -17,7 +17,7 @@
 
 ## NotifyActorBeginOverlap
 
-函数先执行父类重叠回调，将 `OtherActor` 转为 `AGAS_PlayerCharacter`，要求玩家存活且具有 ASC，并检查投射物自身的 `HasAuthority()`。随后用目标玩家的 ASC 创建上下文和等级 1 的效果 Spec。
+函数先执行父类重叠回调，将 `OtherActor` 转为 `AGAS_PlayerCharacter`，检查玩家是否存活、是否持有 ASC，再用 `HasAuthority()` 检查投射物自身的网络权限。随后用目标玩家的 ASC 创建上下文和等级 1 的效果 Spec。
 
 以下摘自 `GAS_Projectile.cpp` 的 `NotifyActorBeginOverlap()`，保留上下文创建至销毁部分，省略空行。
 

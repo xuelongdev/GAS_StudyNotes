@@ -27,7 +27,7 @@
 
 `BeginPlay()` 从 Owner 取得角色及两个数据引用。角色有效时以 `AddUniqueDynamic` 持续监听 `OnASCInitialized`，随后尝试绑定。通知到达时，`OnSACInitialized()` 以广播参数更新数据来源，再调用同一个初始化函数。
 
-`InitializeAttributeDelegate()` 以 ASC 与属性集弱引用的有效性为入口。它先调用 `InitWidget()`，根控件为空时返回。ASC、属性集和根控件均与已绑定记录相同时跳过重绑，其他情况先移除旧句柄，再缓存当前对象并遍历控件。若 ASC 或属性集无效，函数直接清理旧绑定。这个过程独立于属性集的初始化标记。
+`InitializeAttributeDelegate()` 先检查 ASC 和属性集的弱引用。它先调用 `InitWidget()`，根控件为空时返回。ASC、属性集和根控件均与已绑定记录相同时跳过重绑，其他情况先移除旧句柄，再缓存当前对象并遍历控件。若 ASC 或属性集无效，函数直接清理旧绑定。这个过程独立于属性集的初始化标记。
 
 ```mermaid
 flowchart TD

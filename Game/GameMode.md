@@ -50,7 +50,7 @@ flowchart TD
 
 ## 与角色类函数的关系
 
-本项目启动能力的授予入口在角色中，与 GameMode 的类配置通过以下依赖接起来。
+GameMode 指定默认角色类，角色在自己的初始化回调中授予启动能力。
 
 ```mermaid
 flowchart TD

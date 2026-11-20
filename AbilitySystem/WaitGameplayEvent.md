@@ -26,4 +26,4 @@ flowchart TD
     dispatch -->|"索敌能力接到 EndAttack"| search["StartSearch"]
 ```
 
-索敌调用在服务端，目标为敌人 Avatar。蓝图中同名的引擎等待节点与本类代理可通过各自的工厂引用区分。参见 [索敌能力](SearchForTarget.md)。
+索敌调用在服务端，目标为敌人 Avatar。在蓝图中遇到同名等待节点时，查看节点引用的工厂函数即可区分引擎节点和本类代理。参见 [索敌能力](SearchForTarget.md)。

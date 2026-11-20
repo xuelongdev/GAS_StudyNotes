@@ -17,7 +17,7 @@
 
 ## 监听与结束
 
-`ListenForAttributeChange()` 先用 `NewObject` 创建代理，写入 ASC 与属性。空 ASC 分支调用 `RemoveFromRoot()` 并返回空指针。ASC 有效时用 `AddUObject` 绑定 `AttributeChanged()`，然后返回代理。工厂建立订阅时没有主动广播当前值。有效分支的代理保活和结束时机需要结合实际蓝图核验。
+`ListenForAttributeChange()` 先用 `NewObject` 创建代理，写入 ASC 与属性。空 ASC 分支调用 `RemoveFromRoot()` 并返回空指针。ASC 有效时用 `AddUObject` 绑定 `AttributeChanged()`，然后返回代理。订阅只接收绑定之后的变化。工厂函数不会在绑定时广播当前值。有效分支的代理保活和结束时机需要结合实际蓝图核验。
 
 以下摘自 `GAS_AttritubeChangeTask.cpp` 的完整 `EndTask()`，省略空行。
 
