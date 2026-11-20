@@ -79,6 +79,12 @@ flowchart TD
 
 ```text
 Maps/Map_Main.umap
+Maps/_GENERATED/ASUS/Capsule_7D45A9AB.uasset
+GameObjects/
+  BP_GAS_Projectile.uasset
+  Mesh/SM_Projectile.uasset
+  Mesh/M_Projectile.uasset
+  Mesh/MI_Projectile.uasset
 UI/
   BP_PlayerStatsWidget.uasset
   BP_ManaBar.uasset
@@ -122,6 +128,7 @@ Blueprints/
     GameplayEffects/GE_Initialize_Attributes.uasset
     GameplayEffects/GE_Death.uasset
     GameplayEffects/GE_ResetAttributes.uasset
+    GameplayEffects/Enemy/GE_Enemy_Ranged_Damage.uasset
     GameplayEffects/Player/GE_PlayerDamage.uasset
     GameplayEffects/Player/CT_PlayerDamage.uasset
     Abilities/

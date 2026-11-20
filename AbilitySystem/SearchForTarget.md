@@ -48,3 +48,7 @@ flowchart TD
 `Ranged/GA_GAS_Attack_Ranged` 继承 `UGAS_GameplayAbility`，AssetTags 为 Enemy.Attack，实例策略为 Instanced Per Actor，网络执行策略为 Server Only。资产引用 `AM_Attack_Ranged`，蒙太奇保存的 `SequenceLength` 为 1 秒。攻击图保存 `K2_ActivateAbility`、蒙太奇任务、`GetAvatarActorFromActorInfo`、`SendGameplayEventToActor`、`K2_EndAbility` 节点和 EndAttack 标签。发送目标、事件时机及引脚连接待编辑器核验。
 
 参见 [敌人角色](../Characters/EnemyCharacter.md)、[最近目标查询](../Utils/BlueprintLibrary.md) 和 [事件等待代理](WaitGameplayEvent.md)。
+
+## 远程投射物生成节点
+
+`Ranged/GA_GAS_Attack_Ranged` 的资产保存了 `BP_GAS_Projectile` 类引用、`K2Node_SpawnActorFromClass` 节点及 Damage 引脚。图中还保存 `K2_HasAuthority`、`GetOwningComponentFromActorInfo`、`GetSocketTransform`、`GetForwardVector` 与 `MakeRotFromX` 节点。生成时机、Socket、Owner 和 Instigator 连线待核验。重叠处理及伤害配置见 [投射物类](../GameObjects/Projectile.md)。

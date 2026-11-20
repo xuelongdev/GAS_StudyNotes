@@ -7,6 +7,7 @@
 | `GE_Initialize_Attributes` | Health、MaxHealth、Mana、MaxMana | Override | 各 100，无曲线行 |
 | `GE_ResetAttributes` | Health、MaxHealth、MaxMana | Override | 各 100，无曲线行 |
 | `GE_ResetAttributes` | Mana | Override | 99，无曲线行 |
+| `Enemy/GE_Enemy_Ranged_Damage` | Health | AddBase | 常量 -5 |
 | `Player/GE_PlayerDamage` | Health | AddBase | 系数 -1，曲线表 `Player/CT_PlayerDamage` 的 `Primary` 行 |
 
 玩家蓝图与敌人基蓝图的 `InitializeAttributesEffect` 均指向初始化效果。敌人基蓝图还保存 `ResetAttributesEffect = GE_ResetAttributes`，近战与远程派生蓝图继承该设置。玩家蓝图的默认对象未保存该重置效果字段。C++ 初始化与重置均创建等级 1 的 Spec，并应用到自身 ASC。
@@ -24,3 +25,5 @@ flowchart TD
 ```
 
 参见 [角色基类](../Characters/CharacterBase.md)、[主攻击](Primary.md) 和 [属性集](AttributeSet.md)。
+
+远程投射物的默认效果为 `Enemy/GE_Enemy_Ranged_Damage`，由目标玩家 ASC 创建等级 1 的 Spec 并应用到自身。投射物的 `Damage` 生成参数当前尚未参与效果量计算。参见 [投射物类](../GameObjects/Projectile.md)。

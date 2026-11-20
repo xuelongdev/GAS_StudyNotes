@@ -23,6 +23,7 @@
 | `Tasks/GAS_AttritubeChangeTask` | `UGAS_AttributeChangeTask` | [蓝图异步属性监听与结束清理](Tasks/AttributeChangeTask.md) |
 | `AbilitySystem/Abilities/Enemy/GAS_SearchForTarget` | `UGAS_SearchForTarget` | [服务端索敌、移动与攻击](AbilitySystem/SearchForTarget.md) |
 | `AbilitySystem/AbilityTasks/GAS_WaitGameplayEvent` | `UGAS_WaitGameplayEvent` | [接收攻击结束事件](AbilitySystem/WaitGameplayEvent.md) |
+| `GameObjects/GAS_Projectile` | `AGAS_Projectile` | [远程投射物、玩家重叠伤害与蓝图设置](GameObjects/Projectile.md) |
 | `Utils/GAS_BlueprintLibrary` | `UGAS_BlueprintLibrary` | [方向枚举、判定与名称映射](Utils/BlueprintLibrary.md) |
 
 ## 非类文件与关系索引
