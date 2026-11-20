@@ -85,3 +85,7 @@ flowchart TD
 UE 5.6 的输入检索路径使用 `Spec.Ability->GetAssetTags().HasAll(...)`；自动激活路径则逐标签执行 `MatchesTagExact()`。两条路径的入口和匹配方式不同。能力标识属性在本机引擎 `GameplayAbility.h` 的显示名为 `AssetTags (Default AbilityTags)`，不要与激活所需、激活阻止或激活附加标签混淆。
 
 具体输入逻辑见 [AGAS_PlayerController](../Player/PlayerController.md)，能力实现见 [UGAS_Primary](../AbilitySystem/Primary.md) 和 [UGAS_HitReact](../AbilitySystem/HitReact.md)。
+
+## SetByCaller 命名空间
+
+`GAS_Tags::SetByCaller::Projectile` 注册字符串为 `GAS_Tags.SetByCaller.Projectile`。投射物用它写入 `-Damage`，`GE_Enemy_Ranged_Damage` 的 Health 修饰量以此为 Data Tag 读取数值。参见 [投射物](../GameObjects/Projectile.md)。

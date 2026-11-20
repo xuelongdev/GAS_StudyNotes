@@ -128,6 +128,8 @@ flowchart TD
 
 ## 生命值监听与存活状态
 
+头文件还公开 `bDrawDebugs`，标记为 EditDefaultsOnly、BlueprintReadOnly，分类为 `GAS|Debug`，默认 false。该开关可由角色派生蓝图读取，与能力类的同名属性分别保存在各自对象上。
+
 玩家的服务端及客户端角色实例分别在各自回调中绑定 Health 委托。敌人的角色绑定位于 `BeginPlay()` 权威端分支。
 
 头文件将 `bAlive` 定义为默认 true、蓝图可读的私有布尔值，并在 `GetLifetimeReplicatedProps()` 中通过 `DOREPLIFETIME` 注册。`IsAlive()` 与 `SetAlive(bool)` 是公开内联访问入口。受保护的 `OnHealthChanged()` 在新值小于或等于零时调用 `HandleDeath()`。基类实现将 `bAlive` 置为 false，敌人重写后还会停止 AI 移动。公开的 BlueprintCallable `HandleRespawn()` 将 `bAlive` 恢复为 true。

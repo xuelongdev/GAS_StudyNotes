@@ -68,7 +68,7 @@ flowchart TD
 flowchart TD
     attack["服务端远程攻击能力"] -.->|"生成节点与时机待核验"| projectile["BP_GAS_Projectile"]
     projectile -->|"服务端重叠存活玩家时"| effect["目标 ASC 应用 GE_Enemy_Ranged_Damage"]
-    effect -->|"Health 减少 5，值经 ASC 变化委托送达"| health["角色生命值回调与 UI 刷新"]
+    effect -->|"Health 按 -Damage 修改，值经 ASC 变化委托送达"| health["角色生命值回调与 UI 刷新"]
     effect -->|"效果执行后满足击杀条件时"| kill["AttributeSet 发送 KillScored"]
     kill -.->|"上下文 Instigator 与射手归属待运行核验"| listener["击杀监听能力"]
 ```

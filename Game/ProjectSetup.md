@@ -78,73 +78,104 @@ flowchart TD
 以下路径以 `Content/GAS_Learning` 为根：
 
 ```text
-Maps/Map_Main.umap
-Maps/_GENERATED/ASUS/Capsule_7D45A9AB.uasset
-GameObjects/
-  BP_GAS_Projectile.uasset
-  Mesh/SM_Projectile.uasset
-  Mesh/M_Projectile.uasset
-  Mesh/MI_Projectile.uasset
-UI/
-  BP_PlayerStatsWidget.uasset
-  BP_ManaBar.uasset
-  BP_HealthBar.uasset
-  BP_GAS_WidgetComponent.uasset
 Blueprints/
-  Game/BP_GAS_Gamemode.uasset
-  Player/BP_GAS_PlayerController.uasset
-  Player/BP_GAS_PlayerState.uasset
-  Player/BP_EnemyController.uasset
+  AbilitySystem/
+    Abilities/
+      EnemyAbilities/
+        GA_GAS_HitReact.uasset
+        GA_GAS_SearchForTarget.uasset
+        Melee/
+          GA_GAS_Attack_Melee.uasset
+          GA_GAS_Death_Melee.uasset
+          GA_GAS_HitReact_Melee.uasset
+        Ranged/
+          GA_GAS_Attack_Ranged.uasset
+          GA_GAS_Death_Ranged.uasset
+          GA_GAS_HitReact_Ranged.uasset
+      GA_GAS_Death.uasset
+      GA_GAS_ListebForHealthChange.uasset
+      PlayerAbilities/
+        GA_GAS_LitenForKillScored.uasset
+        GA_GAS_Primary.uasset
+        GA_Secondary.uasset
+        GA_Teriary.uasset
+    GameplayEffects/
+      Enemy/
+        GE_Enemy_Ranged_Damage.uasset
+      GE_Death.uasset
+      GE_Initialize_Attributes.uasset
+      GE_ResetAttributes.uasset
+      Player/
+        CT_PlayerDamage.uasset
+        GE_PlayerDamage.uasset
   Characters/
-    Player/
-      BP_GAS_PlayerCharacter.uasset
-      Anim/AM_GAS_Primary_A.uasset
-      Anim/AM_GAS_Primary_B.uasset
-      Anim/Primary_A.uasset
-      Anim/Primary_B.uasset
     Enemy/
-      BP_GAS_EnemyBase.uasset
+      Anim/
+        Melee/
+          ABP_Enemy_Melee.uasset
+          AM_Attack_Melee_1.uasset
+          AM_Attack_Melee_2.uasset
+          AM_Attack_Melee_3.uasset
+          AM_Attack_Melee_4.uasset
+          AM_Attack_Melee_5.uasset
+          AM_Attack_Melee_6.uasset
+          AM_Death_Melee.uasset
+          AM_HitReact_Melee.uasset
+        Ranged/
+          ABP_Enemy_Ranged.uasset
+          AM_Attack_Ranged_1.uasset
+          AM_Attack_Ranged_2.uasset
+          AM_Attack_Ranged_3.uasset
+          AM_Attack_Ranged_4.uasset
+          AM_Death_Ranged.uasset
+          AM_HitReact_Ranged.uasset
       BP_Enemy_Melee.uasset
       BP_Enemy_Ranged.uasset
-      Anim/ABP_Enemy_Melee.uasset
-      Anim/ABP_Enemy_Ranged.uasset
-      Anim/AM_HitReact_Melee.uasset
-      Anim/AM_HitReact_Ranged.uasset
-      Anim/AM_Death_Melee.uasset
-      Anim/AM_Death_Ranged.uasset
-      Anim/AM_Attack_Ranged.uasset
-  Notifies/AN_SendEventToActor.uasset
+      BP_GAS_EnemyBase.uasset
+    Player/
+      Anim/
+        AM_GAS_Primary_A.uasset
+        AM_GAS_Primary_B.uasset
+        Primary_A.uasset
+        Primary_B.uasset
+      BP_GAS_PlayerCharacter.uasset
+  Game/
+    BP_GAS_Gamemode.uasset
   Input/
-    IMC_Movement.uasset
+    AbilityActions/
+      IA_LevelUpAbility.uasset
+      IA_Primary.uasset
+      IA_Secondary.uasset
+      IA_Tertiary.uasset
     IMC_Abilities.uasset
-    MovementActions/IA_Jump.uasset
-    MovementActions/IA_Move.uasset
-    MovementActions/IA_Look.uasset
-    AbilityActions/IA_Primary.uasset
-    AbilityActions/IA_Secondary.uasset
-    AbilityActions/IA_Tertiary.uasset
-    AbilityActions/IA_LevelUpAbility.uasset
-  AbilitySystem/
-    GameplayEffects/GE_Initialize_Attributes.uasset
-    GameplayEffects/GE_Death.uasset
-    GameplayEffects/GE_ResetAttributes.uasset
-    GameplayEffects/Enemy/GE_Enemy_Ranged_Damage.uasset
-    GameplayEffects/Player/GE_PlayerDamage.uasset
-    GameplayEffects/Player/CT_PlayerDamage.uasset
-    Abilities/
-      GA_GAS_ListebForHealthChange.uasset
-      GA_GAS_Death.uasset
-      PlayerAbilities/GA_GAS_Primary.uasset
-      PlayerAbilities/GA_Secondary.uasset
-      PlayerAbilities/GA_Teriary.uasset
-      PlayerAbilities/GA_GAS_LitenForKillScored.uasset
-      EnemyAbilities/GA_GAS_HitReact.uasset
-      EnemyAbilities/Melee/GA_GAS_HitReact_Melee.uasset
-      EnemyAbilities/Ranged/GA_GAS_HitReact_Ranged.uasset
-      EnemyAbilities/Melee/GA_GAS_Death_Melee.uasset
-      EnemyAbilities/Ranged/GA_GAS_Death_Ranged.uasset
-      EnemyAbilities/Ranged/GA_GAS_Attack_Ranged.uasset
-      EnemyAbilities/GA_GAS_SearchForTarget.uasset
+    IMC_Movement.uasset
+    MovementActions/
+      IA_Jump.uasset
+      IA_Look.uasset
+      IA_Move.uasset
+  Notifies/
+    AN_MeleeAttack.uasset
+    AN_SendEventToActor.uasset
+  Player/
+    BP_EnemyController.uasset
+    BP_GAS_PlayerController.uasset
+    BP_GAS_PlayerState.uasset
+GameObjects/
+  BP_GAS_Projectile.uasset
+  Mesh/
+    MI_Projectile.uasset
+    M_Projectile.uasset
+    SM_Projectile.uasset
+Maps/
+  Map_Main.umap
+  _GENERATED/
+    ASUS/
+      Capsule_7D45A9AB.uasset
+UI/
+  BP_GAS_WidgetComponent.uasset
+  BP_HealthBar.uasset
+  BP_ManaBar.uasset
+  BP_PlayerStatsWidget.uasset
 ```
 
 `/Game/...` 对应磁盘 `Content/...`；GameMode 路径的 `_C` 指蓝图生成类。上述资源均已核对文件路径。蓝图父类、已保存的默认引用及通知配置记录在对应类或资产笔记中。

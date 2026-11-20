@@ -36,6 +36,7 @@
 | 角色、PlayerState、ASC 与 Controller | [跨类授予及激活关系](AbilitySystem/StartupAbilities.md) |
 | 标签、能力类、动画与通知资产 | [事件关系索引](AbilitySystem/GameplayEvents.md) |
 | 生命值监听、死亡能力、效果和动画 | [死亡蓝图设置](AbilitySystem/DeathBlueprints.md) |
+| 近战与远程攻击资产、通知检测 | [敌人攻击蓝图](AbilitySystem/EnemyAttackBlueprints.md) |
 | 初始化、重置与玩家伤害的 Gameplay Effects | [属性效果设置](AbilitySystem/GameplayEffects.md) |
 
 ## 类间职责关系

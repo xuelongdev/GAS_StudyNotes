@@ -93,7 +93,7 @@ flowchart TD
 已确认以下文件存在于 `Content/GAS_Learning/Blueprints/Characters/Enemy`：
 
 - `BP_GAS_EnemyBase.uasset`、`BP_Enemy_Melee.uasset`、`BP_Enemy_Ranged.uasset`。
-- `Anim/ABP_Enemy_Melee.uasset`、`Anim/ABP_Enemy_Ranged.uasset`。
+- `Anim/Melee/ABP_Enemy_Melee.uasset`、`Anim/Ranged/ABP_Enemy_Ranged.uasset`。
 
 父类、启动能力和血条组件的保存值见下方蓝图设置。Actor 的实际复制表现与动画蓝图运行行为待编辑器验证。
 
@@ -112,7 +112,7 @@ flowchart TD
 | 蓝图 | 父类 | StartupAbilities |
 | --- | --- | --- |
 | BP_GAS_EnemyBase | AGAS_EnemyCharacter | GA_GAS_HitReact |
-| BP_Enemy_Melee | BP_GAS_EnemyBase | GA_GAS_HitReact_Melee、GA_GAS_ListebForHealthChange、GA_GAS_Death_Melee、GA_GAS_SearchForTarget |
+| BP_Enemy_Melee | BP_GAS_EnemyBase | GA_GAS_HitReact_Melee、GA_GAS_ListebForHealthChange、GA_GAS_Death_Melee、GA_GAS_SearchForTarget、GA_GAS_Attack_Melee |
 | BP_Enemy_Ranged | BP_GAS_EnemyBase | GA_GAS_HitReact_Ranged、GA_GAS_ListebForHealthChange、GA_GAS_Death_Ranged、GA_GAS_SearchForTarget、GA_GAS_Attack_Ranged |
 
 基蓝图的 `InitializeAttributesEffect` 为 `GE_Initialize_Attributes`。基蓝图组件将 `BP_HealthBar` 作为 Widget Class，Space 为 Screen，Draw Size 为 120 × 10，`AttributeMap` 保存 Health 对 MaxHealth。
